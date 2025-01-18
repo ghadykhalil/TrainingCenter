@@ -11,10 +11,16 @@ import java.util.List;
  * @author User
  */
 public interface LearningMaterial {
+
     void add(LearningMaterial material);
+
     void remove(LearningMaterial material);
+
     List<LearningMaterial> getChildren();
+
     void display();
+
     void setContent(String content);
+
     String getContent();
 }
