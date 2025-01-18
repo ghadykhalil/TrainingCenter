@@ -11,4 +11,28 @@
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>com.mycompany.trainingcenter.TrainingCenter</exec.mainClass>
     </properties>
+        <dependencies>
+        <!-- Jackson dependencies -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.12.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.12.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE160</version>
+        </dependency>
+    </dependencies>
+
 </project>
