@@ -8,19 +8,9 @@ package models;
  *
  * @author User
  */
-public interface User {
+public interface QuestionFactory {
 
-    int getId();
+    void createQuestion();
 
-    String getUsername();
-
-    void setUsername(String username);
-
-    String getName();
-
-    void setName(String name);
-
-    void setOnlineStatus(boolean status);
-
-    boolean getOnlineStatus();
+    void createSolution();
 }

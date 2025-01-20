@@ -8,19 +8,6 @@ package models;
  *
  * @author User
  */
-public interface User {
-
-    int getId();
-
-    String getUsername();
-
-    void setUsername(String username);
-
-    String getName();
-
-    void setName(String name);
-
-    void setOnlineStatus(boolean status);
-
-    boolean getOnlineStatus();
+public interface Response {
+    boolean evaluate(Object correctAnswer);
 }

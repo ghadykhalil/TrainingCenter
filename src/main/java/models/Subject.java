@@ -4,6 +4,9 @@
  */
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author User
@@ -15,8 +18,10 @@ public class Subject {
     private String name;
     private String desciption;
     private int level;
+    private List<Enroll> enrollments;
 
     public Subject() {
+        enrollments = new ArrayList<>();
     }
 
     ;
@@ -54,5 +59,17 @@ public class Subject {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public List<Enroll> getEnrollments() {
+        return enrollments;
+    }
+
+    public void addEnrollment(Enroll enrollment) {
+        enrollments.add(enrollment);
+    }
+
+    public void removeEnrollment(Enroll enrollment) {
+        enrollments.remove(enrollment);
     }
 }

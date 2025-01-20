@@ -8,19 +8,16 @@ package models;
  *
  * @author User
  */
-public interface User {
+public interface PaymentMethod {
 
-    int getId();
+    void pay();
 
-    String getUsername();
+    boolean getPaymentStatus();
 
-    void setUsername(String username);
+    void setPaymentStatus(boolean paymentStatus);
 
-    String getName();
+    double getAmount();
 
-    void setName(String name);
+    void setAmount(double amount);
 
-    void setOnlineStatus(boolean status);
-
-    boolean getOnlineStatus();
 }

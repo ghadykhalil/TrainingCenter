@@ -14,9 +14,9 @@ public class Test {
     private static int next = 0;
     private String title;
     private double duration;
-    
-    public Test(){
-        
+
+    public Test() {
+
     }
 
     public Test(String title, double duration, double note) {
@@ -24,9 +24,7 @@ public class Test {
         this.duration = duration;
         this.note = note;
     }
-    
-   
-    
+
     public String getTitle() {
         return title;
     }

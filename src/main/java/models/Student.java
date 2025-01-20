@@ -11,33 +11,27 @@ import java.util.List;
  *
  * @author User
  */
-public class Instructor implements User {
+public class Student implements User {
 
     private int id;
     private static int next = 0;
     private String username;
     private String name;
     private boolean onlineStatus;
-    private List<Subject> subjects;
+    private List<Enroll> enrollments;
+    private List<Payment> payments;
 
-    public Instructor() {
-        subjects = new ArrayList<>();
+    public Student() {
+        this.enrollments = new ArrayList<>();
+        this.payments = new ArrayList<>();
     }
 
     ;
     
-    public Instructor(String u, String n) {
+    public Student(String u, String n) {
         this.id = ++next;
         this.username = u;
         this.name = n;
-    }
-
-    public void addSubject(Subject subject) {
-        this.subjects.add(subject);
-    }
-
-    public List<Subject> getSubjects() {
-        return this.subjects;
     }
 
     @Override
@@ -82,4 +76,27 @@ public class Instructor implements User {
                 + "username =" + this.username;
     }
 
+    public List<Enroll> getEnrollments() {
+        return enrollments;
+    }
+
+    public void addEnrollment(Enroll enrollment) {
+        enrollments.add(enrollment);
+    }
+
+    public void removeEnrollment(Enroll enrollment) {
+        enrollments.remove(enrollment);
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void addPayment(Payment payment) {
+        payments.add(payment);
+    }
+
+    public void removePayment(Payment payment) {
+        payments.remove(payment);
+    }
 }

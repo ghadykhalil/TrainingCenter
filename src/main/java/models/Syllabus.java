@@ -18,9 +18,11 @@ public class Syllabus implements LearningMaterial {
     private String content;
     private List<LearningMaterial> children;
     private int objectiveNo;
+    private List<TrainingSession> trainingSessions;
 
     public Syllabus() {
         this.children = new ArrayList<>();
+        this.trainingSessions = new ArrayList<>();
     }
 
     public Syllabus(String c) {
@@ -69,4 +71,13 @@ public class Syllabus implements LearningMaterial {
         this.objectiveNo = objectiveNo;
     }
 
+    public List<TrainingSession> getTrainingSessions() {
+        return trainingSessions;
+    }
+
+    public void setTrainingSessions(List<TrainingSession> trainingSessions) {
+        this.trainingSessions = trainingSessions;
+    }
+
+    
 }
