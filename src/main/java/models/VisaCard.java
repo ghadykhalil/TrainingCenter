@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.Date;
 
 /**
@@ -12,8 +13,7 @@ import java.util.Date;
  */
 public class VisaCard implements PaymentMethod {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String cardNumber;
     private String threeDigitCode;
     private Date expiryDate;
@@ -21,12 +21,14 @@ public class VisaCard implements PaymentMethod {
     double amount;
 
     public VisaCard() {
+        id = IdGenerator.generateId();
+
     }
 
     ;
 
     public VisaCard(String cardNumber, String threeDigitCode, Date expiryDate, double amount) {
-        this.id = ++next;
+        this();
         this.cardNumber = cardNumber;
         this.threeDigitCode = threeDigitCode;
         this.expiryDate = expiryDate;
@@ -81,6 +83,5 @@ public class VisaCard implements PaymentMethod {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-    
 
 }

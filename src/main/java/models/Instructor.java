@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,23 +12,23 @@ import java.util.List;
  *
  * @author User
  */
-public class Instructor implements User {
+public class Instructor implements User, Observer {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String username;
     private String name;
     private boolean onlineStatus;
-    private List<Subject> subjects;
+    private List<Subject> subjects = new ArrayList<>();
 
     public Instructor() {
+        id = IdGenerator.generateId();
         subjects = new ArrayList<>();
     }
 
     ;
     
     public Instructor(String u, String n) {
-        this.id = ++next;
+        this();
         this.username = u;
         this.name = n;
     }
@@ -41,7 +42,7 @@ public class Instructor implements User {
     }
 
     @Override
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -80,6 +81,10 @@ public class Instructor implements User {
         return "Instructor: id= " + this.id + ",\n"
                 + "name= " + this.name + ",\n"
                 + "username =" + this.username;
+    }
+
+    public void update(String message) {
+        System.out.println("Instructor " + name + " received message: " + message);
     }
 
 }

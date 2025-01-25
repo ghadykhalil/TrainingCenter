@@ -4,18 +4,19 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
+
 /**
  *
  * @author User
  */
 public class TrueOrFalseResponse implements Response {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private boolean selectedValue;
 
     public TrueOrFalseResponse(boolean selectedValue) {
-        this.id = ++next;
+        id = IdGenerator.generateId();
         this.selectedValue = selectedValue;
     }
 
@@ -24,7 +25,7 @@ public class TrueOrFalseResponse implements Response {
         return selectedValue == (boolean) correctAnswer;
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 }

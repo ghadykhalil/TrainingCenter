@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +14,20 @@ import java.util.List;
  */
 public class QCMQuestion implements Question {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String questionText;
-    private List<String> choices;
+    private List<String> choices = new ArrayList<>();
 
     public QCMQuestion() {
-        choices = new ArrayList<>();
+        id = IdGenerator.generateId();
     }
 
     public QCMQuestion(String questionText) {
-        this.id = ++next;
+        this();
         this.questionText = questionText;
     }
 
+    @Override
     public String getQuestionText() {
         return questionText;
     }

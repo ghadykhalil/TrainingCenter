@@ -4,6 +4,7 @@ package models;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import models.LearningMaterial;
@@ -14,17 +15,16 @@ import models.LearningMaterial;
  */
 public class Chapter implements LearningMaterial {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String content;
-    private List<LearningMaterial> children;
+    private List<LearningMaterial> children = new ArrayList<>();
 
     public Chapter() {
-        this.children = new ArrayList<>();
+        id = IdGenerator.generateId();
     }
 
     public Chapter(String c) {
-        id = ++next;
+        this();
         content = c;
     }
 

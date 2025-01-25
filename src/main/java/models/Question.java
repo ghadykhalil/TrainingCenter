@@ -10,4 +10,5 @@ package models;
  */
 public interface Question {
 
+    String getQuestionText();
 }

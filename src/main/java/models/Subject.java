@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,28 +14,24 @@ import java.util.List;
  */
 public class Subject {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String name;
     private String desciption;
     private int level;
-    private List<Enroll> enrollments;
+    private List<Enroll> enrollments = new ArrayList<>();
 
     public Subject() {
-        enrollments = new ArrayList<>();
+        id = IdGenerator.generateId();
+
     }
 
     ;
     
     public Subject(String n, String d, int l) {
-        this.id = ++next;
+        this();
         this.name = n;
         this.desciption = d;
         this.level = l;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

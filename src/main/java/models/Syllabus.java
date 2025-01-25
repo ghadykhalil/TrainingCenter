@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +14,19 @@ import java.util.List;
  */
 public class Syllabus implements LearningMaterial {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String content;
-    private List<LearningMaterial> children;
+    private List<LearningMaterial> children = new ArrayList<>();
     private int objectiveNo;
-    private List<TrainingSession> trainingSessions;
+    private List<TrainingSession> trainingSessions = new ArrayList<>();
 
     public Syllabus() {
-        this.children = new ArrayList<>();
-        this.trainingSessions = new ArrayList<>();
+        id = IdGenerator.generateId();
+
     }
 
     public Syllabus(String c) {
-        id = ++next;
+        this();
         content = c;
     }
 
@@ -79,5 +79,4 @@ public class Syllabus implements LearningMaterial {
         this.trainingSessions = trainingSessions;
     }
 
-    
 }

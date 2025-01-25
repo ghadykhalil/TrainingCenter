@@ -8,19 +8,11 @@ package models;
  *
  * @author User
  */
-public interface User {
+public interface Observable {
 
-    String getId();
+    void addObserver(Observer observer);
 
-    String getUsername();
+    void removeObserver(Observer observer);
 
-    void setUsername(String username);
-
-    String getName();
-
-    void setName(String name);
-
-    void setOnlineStatus(boolean status);
-
-    boolean getOnlineStatus();
+    void notifyObservers(String message);
 }

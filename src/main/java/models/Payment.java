@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.Date;
 
 /**
@@ -12,8 +13,7 @@ import java.util.Date;
  */
 public class Payment {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private double amount;
     private boolean status;
     private Date paymentDate;
@@ -22,10 +22,11 @@ public class Payment {
     private PaymentMethod paymentMethod;
 
     public Payment() {
+        id = IdGenerator.generateId();
     }
 
     public Payment(double amount, boolean status, Date paymentDate, Student student, PaymentMethod paymentMethod) {
-        this.id = ++next;
+        this();
         this.amount = amount;
         this.status = false;
         this.paymentDate = paymentDate;

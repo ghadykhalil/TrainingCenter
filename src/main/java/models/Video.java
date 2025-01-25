@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,17 +14,17 @@ import java.util.List;
  */
 public class Video implements LearningMaterial {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String path;
-    private List<LearningMaterial> children;
+    private List<LearningMaterial> children = new ArrayList<>();
 
     public Video() {
+        id = IdGenerator.generateId();
+
         this.children = new ArrayList<>();
     }
 
     public Video(String c) {
-        id = ++next;
         path = c;
     }
 

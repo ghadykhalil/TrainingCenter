@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,31 +12,29 @@ import java.util.List;
  *
  * @author User
  */
-public class Student implements User {
+public class Student implements User, Observer {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String username;
     private String name;
     private boolean onlineStatus;
-    private List<Enroll> enrollments;
-    private List<Payment> payments;
+    private List<Enroll> enrollments = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>();
 
     public Student() {
-        this.enrollments = new ArrayList<>();
-        this.payments = new ArrayList<>();
+        id = IdGenerator.generateId();
     }
 
     ;
     
     public Student(String u, String n) {
-        this.id = ++next;
+        this();
         this.username = u;
         this.name = n;
     }
 
     @Override
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -71,9 +70,7 @@ public class Student implements User {
 
     @Override
     public String toString() {
-        return "Instructor: id= " + this.id + ",\n"
-                + "name= " + this.name + ",\n"
-                + "username =" + this.username;
+        return this.username;
     }
 
     public List<Enroll> getEnrollments() {
@@ -98,5 +95,10 @@ public class Student implements User {
 
     public void removePayment(Payment payment) {
         payments.remove(payment);
+    }
+
+    @Override
+    public void update(String message) {
+        System.out.println("Student " + name + " received update: " + message);
     }
 }

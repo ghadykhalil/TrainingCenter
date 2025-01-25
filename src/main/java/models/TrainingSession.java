@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,23 +15,22 @@ import java.util.List;
  */
 public class TrainingSession {
 
-    private int id;
-    private static int next;
+    private String id;
     private Date startDuration;
     private Date endDuration;
     private String title;
     private String scope;
     private double totalpayments;
-    private List<Payment> payments;
-    private List<Meeting> meetings;
+    private List<Payment> payments = new ArrayList<>();
+    private List<Meeting> meetings = new ArrayList<>();
 
     public TrainingSession() {
-        payments = new ArrayList<>();
-        meetings = new ArrayList<>();
+        id = IdGenerator.generateId();
+
     }
 
     public TrainingSession(Date startDuration, Date endDuration, String title, String scope) {
-        this.id = ++next;
+        this();
         this.startDuration = startDuration;
         this.endDuration = endDuration;
         this.title = title;

@@ -4,24 +4,27 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
+
 /**
  *
  * @author User
  */
 public class Paypal implements PaymentMethod {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String username;
     private String password;
     private boolean paymentStatus;
     private double amount;
 
     public Paypal() {
+        id = IdGenerator.generateId();
+
     }
 
     public Paypal(String username, String password, boolean paymentStatus, double amount) {
-        this.id = ++next;
+        this();
         this.username = username;
         this.password = password;
         this.paymentStatus = paymentStatus;

@@ -4,6 +4,7 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
 import java.util.Date;
 
 /**
@@ -18,16 +19,16 @@ enum enrollStatus {
 
 public class Enroll {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private Date enrollDate;
     private enrollStatus status;
 
     public Enroll() {
+        id = IdGenerator.generateId();
     }
 
     public Enroll(Date enrollDate, enrollStatus status, Student student, Subject subject) {
-        this.id = ++next;
+        this();
         this.enrollDate = enrollDate;
         this.status = status;
         this.student = student;

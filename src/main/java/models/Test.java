@@ -4,22 +4,25 @@
  */
 package models;
 
+import dbWrapper.IdGenerator;
+
 /**
  *
  * @author User
  */
 public class Test {
 
-    private int id;
-    private static int next = 0;
+    private String id;
     private String title;
     private double duration;
 
     public Test() {
+        id = IdGenerator.generateId();
 
     }
 
     public Test(String title, double duration, double note) {
+        this();
         this.title = title;
         this.duration = duration;
         this.note = note;
