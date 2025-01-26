@@ -21,15 +21,12 @@ public class StudentController {
 
     private static final JsonUtils json = JsonUtils.getInstance();
 
-    public StudentController() {
-    }
-
     public static List<Student> getStudents() {
         try {
             List<Student> students = json.readData(STUDENT_FILE, Student.class);
             return students != null ? students : new ArrayList<>();
         } catch (IOException e) {
-            System.out.println("Error reading academic years data: " + e.getMessage());
+            System.out.println("Error reading students data: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -46,7 +43,8 @@ public class StudentController {
         return null;
     }
 
-    public static void addStudent(Student student) {
+    public static boolean addStudent(Student student) {
+        boolean success = false;
         try {
             if (alreadyExists(student.getUsername())) {
                 JOptionPane.showMessageDialog(null,
@@ -55,6 +53,7 @@ public class StudentController {
                         JOptionPane.WARNING_MESSAGE);
             } else {
                 json.saveData(STUDENT_FILE, student);
+                success = true;
                 JOptionPane.showMessageDialog(null,
                         "Student added successfully!",
                         "Success",
@@ -66,6 +65,7 @@ public class StudentController {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+        return success;
     }
 
     public static boolean alreadyExists(String username) {
@@ -73,13 +73,13 @@ public class StudentController {
             List<Student> allStudents = json.readData(STUDENT_FILE, Student.class);
             for (Student objStudent : allStudents) {
                 if (objStudent.getUsername().equals(username)) {
-                    return true; 
+                    return true;
                 }
             }
         } catch (IOException e) {
             System.out.println("Error reading student data: " + e.getMessage());
         }
-        return false; 
+        return false;
     }
 
 }

@@ -5,8 +5,6 @@
 package models;
 
 import dbWrapper.IdGenerator;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -16,12 +14,9 @@ public class Video implements LearningMaterial {
 
     private String id;
     private String path;
-    private List<LearningMaterial> children = new ArrayList<>();
 
     public Video() {
         id = IdGenerator.generateId();
-
-        this.children = new ArrayList<>();
     }
 
     public Video(String c) {
@@ -29,25 +24,12 @@ public class Video implements LearningMaterial {
     }
 
     @Override
-    public void add(LearningMaterial material) {
-        children.add(material);
-    }
-
-    @Override
-    public void remove(LearningMaterial material) {
-        children.remove(material);
-    }
-
-    @Override
-    public List<LearningMaterial> getChildren() {
-        return children;
-    }
-
-    @Override
     public void display() {
-        for (LearningMaterial child : children) {
-            child.display();
-        }
+
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     @Override

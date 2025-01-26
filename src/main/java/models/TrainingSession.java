@@ -20,9 +20,7 @@ public class TrainingSession {
     private Date endDuration;
     private String title;
     private String scope;
-    private double totalpayments;
-    private List<Payment> payments = new ArrayList<>();
-    private List<Meeting> meetings = new ArrayList<>();
+    private List<LearningMaterial> children = new ArrayList<>();
 
     public TrainingSession() {
         id = IdGenerator.generateId();
@@ -69,20 +67,16 @@ public class TrainingSession {
         this.scope = scope;
     }
 
-    public List<Meeting> getMeetings() {
-        return meetings;
+    public List<LearningMaterial> getChildren() {
+        return children;
     }
 
-    public void setMeetings(List<Meeting> meetings) {
-        this.meetings = meetings;
+    public void removeChildren(LearningMaterial le) {
+        this.children.remove(le);
     }
 
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
+    public void setChildren(List<LearningMaterial> children) {
+        this.children = children;
     }
 
 }

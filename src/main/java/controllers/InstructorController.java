@@ -8,8 +8,10 @@ import dbWrapper.JsonUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.swing.JOptionPane;
 import models.Instructor;
+import models.Subject;
 
 /**
  *
@@ -21,15 +23,12 @@ public class InstructorController {
 
     private static final JsonUtils json = JsonUtils.getInstance();
 
-    public InstructorController() {
-    }
-
     public static List<Instructor> getInstructors() {
         try {
             List<Instructor> instructors = json.readData(INSTRUCTOR_FILE, Instructor.class);
             return instructors != null ? instructors : new ArrayList<>();
         } catch (IOException e) {
-            System.out.println("Error reading academic years data: " + e.getMessage());
+            System.out.println("Error reading instructors data: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -46,7 +45,8 @@ public class InstructorController {
         return null;
     }
 
-    public static void addInstructor(Instructor instructor) {
+    public static boolean addInstructor(Instructor instructor) {
+        boolean success = false;
         try {
             if (alreadyExists(instructor.getUsername())) {
                 JOptionPane.showMessageDialog(null,
@@ -55,6 +55,7 @@ public class InstructorController {
                         JOptionPane.WARNING_MESSAGE);
             } else {
                 json.saveData(INSTRUCTOR_FILE, instructor);
+                success = true;
                 JOptionPane.showMessageDialog(null,
                         "Instructor added successfully!",
                         "Success",
@@ -66,12 +67,13 @@ public class InstructorController {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+        return success;
     }
 
     public static boolean alreadyExists(String username) {
         try {
             List<Instructor> allinstructors = json.readData(INSTRUCTOR_FILE, Instructor.class);
-            for (Instructor objInstructor: allinstructors) {
+            for (Instructor objInstructor : allinstructors) {
                 if (objInstructor.getUsername().equals(username)) {
                     return true; // Username exists
                 }
@@ -80,6 +82,23 @@ public class InstructorController {
             System.out.println("Error reading instructor data: " + e.getMessage());
         }
         return false; // Username does not exist
+    }
+
+    public static void updateInstructor(Instructor updatedInstructor) {
+        List<Instructor> allInstructors = getInstructors();
+        for (int i = 0; i < allInstructors.size(); i++) {
+            Instructor instructor = allInstructors.get(i);
+            if (instructor.getId().equals(updatedInstructor.getId())) {
+                allInstructors.set(i, updatedInstructor);
+                try {
+                    json.writeData(INSTRUCTOR_FILE, allInstructors);
+                    return;
+                } catch (IOException e) {
+                    System.out.println("Error updating isntructors: " + e.getMessage());
+                }
+            }
+        }
+        System.out.println("Answer not found: " + updatedInstructor.getId());
     }
 
 }

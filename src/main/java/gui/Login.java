@@ -4,12 +4,12 @@
  */
 package gui;
 
+import controllers.InstructorController;
 import controllers.StudentController;
 import java.util.List;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import models.Instructor;
 import models.Student;
 import models.User;
 
@@ -38,28 +38,30 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        Login = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        UserTypeCmbx = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox();
+        UserTypeCbx = new javax.swing.JComboBox<>();
+        dataCbx = new javax.swing.JComboBox();
 
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel2.setText("Sign in as");
+        jLabel2.setText("Login as");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Don't have an account?");
 
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Login.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Login.setText("Login");
+        Login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                LoginActionPerformed(evt);
             }
         });
 
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton2.setText("Signup");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,17 +69,19 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        UserTypeCmbx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select...", "Student", "Instructor" }));
-        UserTypeCmbx.addActionListener(new java.awt.event.ActionListener() {
+        UserTypeCbx.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        UserTypeCbx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select...", "Student", "Instructor" }));
+        UserTypeCbx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UserTypeCmbxActionPerformed(evt);
+                UserTypeCbxActionPerformed(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>());
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        dataCbx.setModel(new javax.swing.DefaultComboBoxModel<>());
+        dataCbx.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        dataCbx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                dataCbxActionPerformed(evt);
             }
         });
 
@@ -88,62 +92,77 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(201, 201, 201)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(216, 216, 216)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jLabel3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel2))))
+                            .addComponent(Login)
+                            .addComponent(jButton2)
+                            .addComponent(jLabel2)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(260, 260, 260)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(UserTypeCmbx, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(232, Short.MAX_VALUE))
+                        .addGap(230, 230, 230)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dataCbx, 0, 110, Short.MAX_VALUE)
+                            .addComponent(UserTypeCbx, 0, 0, Short.MAX_VALUE))))
+                .addContainerGap(258, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(34, 34, 34)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(UserTypeCmbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addComponent(jButton1)
+                .addGap(19, 19, 19)
+                .addComponent(UserTypeCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(dataCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Login)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String userType = (String) UserTypeCbx.getSelectedItem();
+
+        if (userType == null || userType.equals("Select...")) {
+            JOptionPane.showMessageDialog(null, "Please Select User Type", "No Type Selected", 2);
+        } else if (userType.equals("Student")) {
+
+        } else if (userType.equals("Instructor")) {
+            Instructor instructor = (Instructor) dataCbx.getSelectedItem();
+            if (instructor.getOnlineStatus()) {
+                JOptionPane.showMessageDialog(null, "User Already Logged in!", "Dublicate Login error!", 2);
+            } else {
+                Instructor_Main IM = new Instructor_Main(instructor);
+                IM.setVisible(true);
+                instructor.setOnlineStatus(true);
+                InstructorController.updateInstructor(instructor);
+            }
+        }
+
+    }//GEN-LAST:event_LoginActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Signup signup=new Signup();
+        Signup signup = new Signup();
         signup.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void UserTypeCmbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserTypeCmbxActionPerformed
+    private void UserTypeCbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserTypeCbxActionPerformed
         // TODO add your handling code here:
-        String selectedInput = (String) UserTypeCmbx.getSelectedItem();
+        String selectedInput = (String) UserTypeCbx.getSelectedItem();
 
         switch (selectedInput) {
             case "Select...":
+                DefaultComboBoxModel<String> nullModel = new DefaultComboBoxModel<>();
+                dataCbx.setModel(nullModel);
                 break;
             case "Student":
                 List<Student> students = StudentController.getStudents();
@@ -153,15 +172,25 @@ public class Login extends javax.swing.JFrame {
                 }
 
                 // Set the model to jComboBox2
-                jComboBox2.setModel(studentModel);
+                dataCbx.setModel(studentModel);
+                break;
+            case "Instructor":
+                List<Instructor> instructors = InstructorController.getInstructors();
+                DefaultComboBoxModel<Instructor> instructorModel = new DefaultComboBoxModel<>();
+                for (Instructor instructor : instructors) {
+                    instructorModel.addElement(instructor);
+                }
+                // Set the model to jComboBox2
+                dataCbx.setModel(instructorModel);
                 break;
         }
-    }//GEN-LAST:event_UserTypeCmbxActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_UserTypeCbxActionPerformed
+
+    private void dataCbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataCbxActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_dataCbxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,10 +231,10 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> UserTypeCmbx;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton Login;
+    private javax.swing.JComboBox<String> UserTypeCbx;
+    private javax.swing.JComboBox dataCbx;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

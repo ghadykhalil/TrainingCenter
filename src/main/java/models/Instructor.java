@@ -22,7 +22,6 @@ public class Instructor implements User, Observer {
 
     public Instructor() {
         id = IdGenerator.generateId();
-        subjects = new ArrayList<>();
     }
 
     ;
@@ -39,6 +38,10 @@ public class Instructor implements User, Observer {
 
     public List<Subject> getSubjects() {
         return this.subjects;
+    }
+    
+    public void removeubject(Subject subject) {
+        this.subjects.remove(subject);
     }
 
     @Override
@@ -78,9 +81,7 @@ public class Instructor implements User, Observer {
 
     @Override
     public String toString() {
-        return "Instructor: id= " + this.id + ",\n"
-                + "name= " + this.name + ",\n"
-                + "username =" + this.username;
+        return username;
     }
 
     public void update(String message) {

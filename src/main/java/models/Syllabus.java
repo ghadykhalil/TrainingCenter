@@ -12,13 +12,11 @@ import java.util.List;
  *
  * @author User
  */
-public class Syllabus implements LearningMaterial {
+public class Syllabus implements CompositeLearningMaterial {
 
     private String id;
     private String content;
     private List<LearningMaterial> children = new ArrayList<>();
-    private int objectiveNo;
-    private List<TrainingSession> trainingSessions = new ArrayList<>();
 
     public Syllabus() {
         id = IdGenerator.generateId();
@@ -28,6 +26,15 @@ public class Syllabus implements LearningMaterial {
     public Syllabus(String c) {
         this();
         content = c;
+    }
+
+    @Override
+    public String toString() {
+        List<String> output = new ArrayList<>();
+        for (LearningMaterial child : children) {
+            output.add(child.toString()+"\n");
+        }
+        return this.content + output;
     }
 
     @Override
@@ -62,21 +69,4 @@ public class Syllabus implements LearningMaterial {
     public String getContent() {
         return content;
     }
-
-    public int getObjectiveNo() {
-        return objectiveNo;
-    }
-
-    public void setObjectiveNo(int objectiveNo) {
-        this.objectiveNo = objectiveNo;
-    }
-
-    public List<TrainingSession> getTrainingSessions() {
-        return trainingSessions;
-    }
-
-    public void setTrainingSessions(List<TrainingSession> trainingSessions) {
-        this.trainingSessions = trainingSessions;
-    }
-
 }

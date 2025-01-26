@@ -4,15 +4,17 @@
  */
 package models;
 
+import java.util.List;
+
 /**
  *
  * @author User
  */
-public interface LearningMaterial {
+public interface CompositeLearningMaterial extends LearningMaterial {
 
-    void display();
+    void add(LearningMaterial material);
 
-    void setContent(String content);
+    void remove(LearningMaterial material);
 
-    String getContent();
+    List<LearningMaterial> getChildren();
 }

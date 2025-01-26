@@ -7,15 +7,15 @@ package models;
 import dbWrapper.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
-import models.LearningMaterial;
 
 /**
  *
  * @author User
  */
-public class Chapter implements LearningMaterial {
+public class Chapter implements CompositeLearningMaterial {
 
     private String id;
+    private int chapterNo;
     private String content;
     private List<LearningMaterial> children = new ArrayList<>();
 
@@ -23,32 +23,33 @@ public class Chapter implements LearningMaterial {
         id = IdGenerator.generateId();
     }
 
-    public Chapter(String c) {
+    public Chapter(int chapterNo, String c) {
         this();
-        content = c;
+        this.content = c;
+        this.chapterNo = chapterNo;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public int getChapterNo() {
+        return chapterNo;
+    }
+
+    public void setChapterNo(int chapterNo) {
+        this.chapterNo = chapterNo;
     }
 
     @Override
-    public void add(LearningMaterial material) {
-        children.add(material);
-    }
-
-    @Override
-    public void remove(LearningMaterial material) {
-        children.remove(material);
-    }
-
-    @Override
-    public List<LearningMaterial> getChildren() {
-        return children;
+    public String toString() {
+        return this.chapterNo + this.content;
     }
 
     @Override
     public void display() {
         System.out.println("Chapter Content: " + content);
-        for (LearningMaterial child : children) {
-            child.display();
-        }
+
     }
 
     @Override
@@ -59,6 +60,25 @@ public class Chapter implements LearningMaterial {
     @Override
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public void add(LearningMaterial material) {
+        this.children.add(material);
+    }
+
+    @Override
+    public void remove(LearningMaterial material) {
+        this.children.remove(material);
+    }
+
+    @Override
+    public List<LearningMaterial> getChildren() {
+        return this.children;
+    }
+
+    public void setChildren(List<LearningMaterial> children) {
+        this.children = children;
     }
 
 }

@@ -5,8 +5,6 @@
 package models;
 
 import dbWrapper.IdGenerator;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -16,39 +14,22 @@ public class Objective implements LearningMaterial {
 
     private String id;
     private String content;
-    private List<LearningMaterial> children = new ArrayList<>();
     private int objectiveNo;
 
     public Objective() {
         id = IdGenerator.generateId();
     }
 
-    public Objective(String c) {
+    public Objective(String c, int objectiveNo) {
         this();
         content = c;
-    }
-
-    @Override
-    public void add(LearningMaterial material) {
-        children.add(material);
-    }
-
-    @Override
-    public void remove(LearningMaterial material) {
-        children.remove(material);
-    }
-
-    @Override
-    public List<LearningMaterial> getChildren() {
-        return children;
+        this.objectiveNo = objectiveNo;
     }
 
     @Override
     public void display() {
         System.out.println("Objective Content: " + content);
-        for (LearningMaterial child : children) {
-            child.display();
-        }
+
     }
 
     @Override
