@@ -19,7 +19,6 @@ public class Student implements User, Observer {
     private String name;
     private boolean onlineStatus;
     private List<Enroll> enrollments = new ArrayList<>();
-    private List<Payment> payments = new ArrayList<>();
 
     public Student() {
         id = IdGenerator.generateId();
@@ -83,18 +82,6 @@ public class Student implements User, Observer {
 
     public void removeEnrollment(Enroll enrollment) {
         enrollments.remove(enrollment);
-    }
-
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    public void addPayment(Payment payment) {
-        payments.add(payment);
-    }
-
-    public void removePayment(Payment payment) {
-        payments.remove(payment);
     }
 
     @Override

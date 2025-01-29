@@ -22,17 +22,21 @@ public class Enroll {
     private String id;
     private Date enrollDate;
     private enrollStatus status;
+    private Payment payment;
+    private Student student;
+    private Subject subject;
 
     public Enroll() {
         id = IdGenerator.generateId();
     }
 
-    public Enroll(Date enrollDate, enrollStatus status, Student student, Subject subject) {
+    public Enroll(Date enrollDate, enrollStatus status, Student student, Subject subject, Payment payment) {
         this();
         this.enrollDate = enrollDate;
         this.status = status;
         this.student = student;
         this.subject = subject;
+        this.payment = payment;
     }
 
     public Date getEnrollDate() {
@@ -66,7 +70,16 @@ public class Enroll {
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
-    private Student student;
-    private Subject subject;
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public String getId() {
+        return this.id;
+    }
 }

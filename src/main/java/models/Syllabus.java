@@ -15,6 +15,7 @@ import java.util.List;
 public class Syllabus implements CompositeLearningMaterial {
 
     private String id;
+    private String title;
     private String content;
     private List<LearningMaterial> children = new ArrayList<>();
 
@@ -23,16 +24,17 @@ public class Syllabus implements CompositeLearningMaterial {
 
     }
 
-    public Syllabus(String c) {
+    public Syllabus(String title, String content) {
         this();
-        content = c;
+        this.title = title;
+        this.content = content;
     }
 
     @Override
     public String toString() {
         List<String> output = new ArrayList<>();
         for (LearningMaterial child : children) {
-            output.add(child.toString()+"\n");
+            output.add(child.toString() + "\n");
         }
         return this.content + output;
     }
@@ -68,5 +70,17 @@ public class Syllabus implements CompositeLearningMaterial {
     @Override
     public String getContent() {
         return content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getId() {
+        return this.id;
     }
 }

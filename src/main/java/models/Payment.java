@@ -17,21 +17,16 @@ public class Payment {
     private double amount;
     private boolean status;
     private Date paymentDate;
-    private Student student;
-    private TrainingSession trainingSession;
-    private PaymentMethod paymentMethod;
 
     public Payment() {
         id = IdGenerator.generateId();
     }
 
-    public Payment(double amount, boolean status, Date paymentDate, Student student, PaymentMethod paymentMethod) {
+    public Payment(double amount, boolean status, Date paymentDate) {
         this();
         this.amount = amount;
         this.status = false;
         this.paymentDate = paymentDate;
-        this.student = student;
-        this.paymentMethod = paymentMethod;
     }
 
     public double getAmount() {
@@ -56,30 +51,6 @@ public class Payment {
 
     public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public TrainingSession getTrainingSession() {
-        return trainingSession;
-    }
-
-    public void setTrainingSession(TrainingSession trainingSession) {
-        this.trainingSession = trainingSession;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
     }
 
 }

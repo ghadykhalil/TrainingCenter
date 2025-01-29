@@ -64,10 +64,23 @@ public class SubjectController {
         return success;
     }
 
-    private static List<Subject> getInstructorSubjects(String insstructorId) {
-        List<Subject> allSubjects = new ArrayList<>();
+    public static boolean addSubjects(List<Subject> subjects) {
+        boolean success = false;
+        try {
+            json.saveData(SUBJECT_FILE, subjects);
+            success = true;
+            JOptionPane.showMessageDialog(null,
+                    "Subject added successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
 
-        return allSubjects;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "An error occurred while adding the subject: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return success;
     }
 
 }

@@ -20,7 +20,7 @@ public class Subject {
     private int level;
     private List<Enroll> enrollments = new ArrayList<>();
     private List<Subject> prerequisites = new ArrayList<>();
-    private Syllabus syllabus = new Syllabus();
+    private Syllabus syllabus;
 
     public Subject() {
         id = IdGenerator.generateId();
@@ -45,7 +45,7 @@ public class Subject {
 
     @Override
     public String toString() {
-        return this.name + "\t" + this.level;
+        return this.name + " " + this.level;
     }
 
     public String getId() {
@@ -96,6 +96,10 @@ public class Subject {
         prerequisites.add(prerequisite);
     }
 
+    public void addAllPrerequisites(List<Subject> prerequisites) {
+        this.prerequisites.addAll(prerequisites);
+    }
+
     public void removeEnrollment(Subject prerequisite) {
         prerequisites.remove(prerequisite);
     }
@@ -107,5 +111,7 @@ public class Subject {
     public void setSyllabus(Syllabus syllabus) {
         this.syllabus = syllabus;
     }
+    
+    
 
 }

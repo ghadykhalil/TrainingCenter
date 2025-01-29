@@ -1,0 +1,22 @@
+[{
+        "id": "6f8ccb6d-a2b7-4b25-8ef2-6e7f08d1b961",
+        "name": "Java",
+        "desciption": "The java Programming course is designed to teach students Java programming",
+        "level": 1,
+        "enrollments": [],
+        "prerequisites": []
+    }, {
+        "id": "c916c58b-a105-49b5-9499-53bc71393b2d",
+        "name": "Java",
+        "desciption": "Classes, inheritance, interfaces, polymorphisme",
+        "level": 2,
+        "enrollments": [],
+        "prerequisites": [{
+                "id": "6f8ccb6d-a2b7-4b25-8ef2-6e7f08d1b961",
+                "name": "Java",
+                "desciption": "The java Programming course is designed to teach students Java programming",
+                "level": 1,
+                "enrollments": [],
+                "prerequisites": []
+            }]
+    }]
