@@ -345,12 +345,10 @@
                           <Component id="jButton1" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="addNewSubjectLabel1" max="32767" attributes="0"/>
-                                      <Component id="addNewSubjectLabel2" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="addNewSubjectLabel3" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="selectedSubjectCbx" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="addNewSubjectLabel1" max="32767" attributes="0"/>
+                                  <Component id="addNewSubjectLabel2" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="addNewSubjectLabel3" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="selectedSubjectCbx" alignment="0" max="32767" attributes="0"/>
                                   <Component id="subjectNameTxt1" alignment="0" pref="260" max="32767" attributes="0"/>
                                   <Component id="subjectNameTxt2" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -411,6 +409,9 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectedSubjectCbxActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Subject&gt;"/>
               </AuxValues>

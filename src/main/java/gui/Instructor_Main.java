@@ -6,6 +6,7 @@ package gui;
 
 import controllers.InstructorController;
 import controllers.SubjectController;
+import controllers.SyllabusController;
 import static java.lang.Integer.parseInt;
 import java.text.NumberFormat;
 import java.util.List;
@@ -242,6 +243,11 @@ public class Instructor_Main extends javax.swing.JFrame {
         addNewSubjectLabel1.setText("Selected Subject");
 
         selectedSubjectCbx.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        selectedSubjectCbx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedSubjectCbxActionPerformed(evt);
+            }
+        });
 
         addNewSubjectLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addNewSubjectLabel2.setText("Brief Description");
@@ -286,11 +292,10 @@ public class Instructor_Main extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(addNewSubjectLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(addNewSubjectLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(selectedSubjectCbx, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addNewSubjectLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addNewSubjectLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(selectedSubjectCbx, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(subjectNameTxt1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                             .addComponent(subjectNameTxt2))
                         .addGap(32, 32, 32)
@@ -462,8 +467,22 @@ public class Instructor_Main extends javax.swing.JFrame {
             Subject subject = (Subject) selectedSubjectCbx.getSelectedItem();
             Syllabus syllabus = new Syllabus(syllabusTitle, syllabusDescription);
             subject.setSyllabus(syllabus);
+
+            if (SubjectController.updateSubject(subject)) {
+                SyllabusController.addSyllabus(syllabus);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void selectedSubjectCbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedSubjectCbxActionPerformed
+        // TODO add your handling code here:
+        Subject subjectChanged = (Subject) selectedSubjectCbx.getSelectedItem();
+        Syllabus currentSyllabus = subjectChanged.getSyllabus();
+        if (currentSyllabus != null) {
+            syllabusOutput.setText(currentSyllabus.getContent());
+        }
+
+    }//GEN-LAST:event_selectedSubjectCbxActionPerformed
 
     /**
      * @param args the command line arguments

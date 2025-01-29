@@ -83,4 +83,41 @@ public class SubjectController {
         return success;
     }
 
+    public static boolean updateSubject(Subject updatedSubject) {
+        List<Subject> allSubjects = getSubjects();
+
+        for (int i = 0; i < allSubjects.size(); i++) {
+            Subject subject = allSubjects.get(i);
+
+            // Find the subject that matches the updated one
+            if (subject.getId().equals(updatedSubject.getId())) {
+                // Check if syllabus already exists and prevent overwriting
+                if (subject.getSyllabus() != null) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error: This subject already has a syllabus. Overwriting is not allowed!",
+                            "Update Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return false; // Update failed
+                }
+
+                // Allow updating if syllabus is null
+                allSubjects.set(i, updatedSubject);
+                try {
+                    json.writeData(SUBJECT_FILE, allSubjects);
+                    JOptionPane.showMessageDialog(null,
+                            "Subject updated successfully!",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return true; // Update successful
+                } catch (IOException e) {
+                    System.out.println("Error updating subjects: " + e.getMessage());
+                    return false; // Update failed due to an error
+                }
+            }
+        }
+
+        System.out.println("Subject not found: " + updatedSubject.getId());
+        return false; // Subject not found, update failed
+    }
+
 }

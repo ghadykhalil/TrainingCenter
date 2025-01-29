@@ -4,7 +4,13 @@
         "desciption": "The java Programming course is designed to teach students Java programming",
         "level": 1,
         "enrollments": [],
-        "prerequisites": []
+        "prerequisites": [],
+        "syllabus": {
+            "id": "3afb8be7-a394-4fd0-adc0-dfe8e18216e6",
+            "title": "Introduction to Java",
+            "content": "This is an introduction course to java basics",
+            "children": []
+        }
     }, {
         "id": "c916c58b-a105-49b5-9499-53bc71393b2d",
         "name": "Java",
@@ -17,6 +23,8 @@
                 "desciption": "The java Programming course is designed to teach students Java programming",
                 "level": 1,
                 "enrollments": [],
-                "prerequisites": []
-            }]
+                "prerequisites": [],
+                "syllabus": null
+            }],
+        "syllabus": null
     }]
