@@ -23,6 +23,11 @@ public class Chapter implements CompositeLearningMaterial {
         id = IdGenerator.generateId();
     }
 
+    public Chapter(int chapterNo) {
+        this();
+        this.chapterNo = chapterNo;
+    }
+
     public Chapter(int chapterNo, String c) {
         this();
         this.content = c;
@@ -43,7 +48,7 @@ public class Chapter implements CompositeLearningMaterial {
 
     @Override
     public String toString() {
-        return this.chapterNo + this.content;
+        return "Chapter " + this.chapterNo;
     }
 
     @Override

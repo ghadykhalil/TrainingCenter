@@ -41,7 +41,9 @@ public class Syllabus implements CompositeLearningMaterial {
 
     @Override
     public void add(LearningMaterial material) {
-        children.add(material);
+        if (material instanceof Chapter) {
+            children.add(material);
+        }
     }
 
     @Override
