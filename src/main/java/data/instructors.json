@@ -1,1 +1,21 @@
-[{"id":"a12b71f9-2668-42e1-a925-1450250a97e7","username":"hisham","name":"Hisham","onlineStatus":false,"subjects":[{"id":"6f8ccb6d-a2b7-4b25-8ef2-6e7f08d1b961","name":"Java","desciption":"The java Programming course is designed to teach students Java programming","level":1,"enrollments":[],"prerequisites":[],"syllabus":null},{"id":"c916c58b-a105-49b5-9499-53bc71393b2d","name":"Java","desciption":"Classes, inheritance, interfaces, polymorphisme","level":2,"enrollments":[],"prerequisites":[{"id":"6f8ccb6d-a2b7-4b25-8ef2-6e7f08d1b961","name":"Java","desciption":"The java Programming course is designed to teach students Java programming","level":1,"enrollments":[],"prerequisites":[],"syllabus":null}],"syllabus":null}]},{"id":"f72dad5f-94bb-4672-b1a4-c6fa58d6d7c8","username":"Jake","name":"Jake","onlineStatus":false,"subjects":[]}]
+[{
+        "id": "a12b71f9-2668-42e1-a925-1450250a97e7",
+        "username": "hisham",
+        "name": "Hisham",
+        "onlineStatus": false,
+        "subjects": [{
+                "id": "751a0a63-17a6-4775-aac0-54e8d0563568",
+                "name": "Java",
+                "desciption": "Basic algorithms, functions",
+                "level": 1,
+                "enrollments": [],
+                "prerequisites": [],
+                "syllabus": null
+            }]
+    }, {
+        "id": "f72dad5f-94bb-4672-b1a4-c6fa58d6d7c8",
+        "username": "Jake",
+        "name": "Jake",
+        "onlineStatus": false,
+        "subjects": []
+    }]

@@ -12,12 +12,12 @@ import java.util.List;
  *
  * @author User
  */
-public class Syllabus implements CompositeLearningMaterial {
+public class Syllabus implements LearningMaterial {
 
     private String id;
     private String title;
     private String content;
-    private List<LearningMaterial> children = new ArrayList<>();
+    private List<Chapter> allChapters = new ArrayList<>();
 
     public Syllabus() {
         id = IdGenerator.generateId();
@@ -33,33 +33,28 @@ public class Syllabus implements CompositeLearningMaterial {
     @Override
     public String toString() {
         List<String> output = new ArrayList<>();
-        for (LearningMaterial child : children) {
+        for (LearningMaterial child : allChapters) {
             output.add(child.toString() + "\n");
         }
         return this.content + output;
     }
 
-    @Override
-    public void add(LearningMaterial material) {
-        if (material instanceof Chapter) {
-            children.add(material);
-        }
+    public void add(Chapter chapter) {
+            allChapters.add(chapter);
     }
 
-    @Override
-    public void remove(LearningMaterial material) {
-        children.remove(material);
+    public void remove(Chapter chapter) {
+        allChapters.remove(chapter);
     }
 
-    @Override
-    public List<LearningMaterial> getChildren() {
-        return children;
+    public List<Chapter> getChapters() {
+        return allChapters;
     }
 
     @Override
     public void display() {
         System.out.println("Objective Content: " + content);
-        for (LearningMaterial child : children) {
+        for (LearningMaterial child : allChapters) {
             child.display();
         }
     }

@@ -12,26 +12,26 @@ import java.util.List;
  *
  * @author User
  */
-public class Chapter implements CompositeLearningMaterial {
+public class Chapter implements LearningMaterial {
 
     private String id;
     private int chapterNo;
     private String content;
-    private List<LearningMaterial> children = new ArrayList<>();
+    private List<TrainingSession> allTrainingSessions = new ArrayList<>();
 
     public Chapter() {
         id = IdGenerator.generateId();
     }
 
-    public Chapter(int chapterNo) {
+    public Chapter(int chapterNo, String content) {
         this();
         this.chapterNo = chapterNo;
+        this.content = content;
     }
 
-    public Chapter(int chapterNo, String c) {
+    public Chapter(String c) {
         this();
         this.content = c;
-        this.chapterNo = chapterNo;
     }
 
     public String getId() {
@@ -67,23 +67,20 @@ public class Chapter implements CompositeLearningMaterial {
         return content;
     }
 
-    @Override
-    public void add(LearningMaterial material) {
-        this.children.add(material);
+    public void add(TrainingSession trainingSession) {
+        this.allTrainingSessions.add(trainingSession);
     }
 
-    @Override
-    public void remove(LearningMaterial material) {
-        this.children.remove(material);
+    public void remove(TrainingSession trainingSession) {
+        this.allTrainingSessions.remove(trainingSession);
     }
 
-    @Override
-    public List<LearningMaterial> getChildren() {
-        return this.children;
+    public List<TrainingSession> getTrainingSessions() {
+        return this.allTrainingSessions;
     }
 
-    public void setChildren(List<LearningMaterial> children) {
-        this.children = children;
+    public void setChildren(List<TrainingSession> trainingSessions) {
+        this.allTrainingSessions = trainingSessions;
     }
 
 }
