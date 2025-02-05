@@ -40,11 +40,11 @@ public class Syllabus implements LearningMaterial {
     }
 
     public void add(Chapter chapter) {
-            allChapters.add(chapter);
+        this.allChapters.add(chapter);
     }
 
     public void remove(Chapter chapter) {
-        allChapters.remove(chapter);
+        this.allChapters.remove(chapter);
     }
 
     public List<Chapter> getChapters() {

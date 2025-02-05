@@ -105,7 +105,7 @@ public class Subject {
     }
 
     public Syllabus getSyllabus() {
-        return syllabus;
+        return this.syllabus;
     }
 
     public void setSyllabus(Syllabus syllabus) {

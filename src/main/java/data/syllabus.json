@@ -2,5 +2,15 @@
         "id": "b2c58c11-46ae-4296-a5bc-89cd2881abf8",
         "title": "Syllabus 1",
         "content": "Overall",
-        "chapters": []
+        "chapters": [{
+                "id": "0ce19909-442a-46e8-b671-2b5feaac6b26",
+                "chapterNo": 1,
+                "content": "Variables",
+                "trainingSessions": []
+            }, {
+                "id": "7c944170-4a88-483a-86d4-f5fec4ba6454",
+                "chapterNo": 2,
+                "content": "Functions",
+                "trainingSessions": []
+            }]
     }]

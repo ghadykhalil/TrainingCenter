@@ -48,7 +48,7 @@ public class Chapter implements LearningMaterial {
 
     @Override
     public String toString() {
-        return "Chapter " + this.chapterNo;
+        return "Chapter " + this.chapterNo + " Description: " + this.getContent();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Chapter implements LearningMaterial {
         return this.allTrainingSessions;
     }
 
-    public void setChildren(List<TrainingSession> trainingSessions) {
+    public void setTrainingSession(List<TrainingSession> trainingSessions) {
         this.allTrainingSessions = trainingSessions;
     }
 
