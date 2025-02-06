@@ -1,11 +1,1 @@
-[{
-        "id": "0ce19909-442a-46e8-b671-2b5feaac6b26",
-        "chapterNo": 1,
-        "content": "Variables",
-        "trainingSessions": []
-    }, {
-        "id": "7c944170-4a88-483a-86d4-f5fec4ba6454",
-        "chapterNo": 2,
-        "content": "Functions",
-        "trainingSessions": []
-    }]
+[{"id":"0ce19909-442a-46e8-b671-2b5feaac6b26","chapterNo":1,"content":"Variables","trainingSessions":[]},{"id":"7c944170-4a88-483a-86d4-f5fec4ba6454","chapterNo":2,"content":"Functions","trainingSessions":[]},{"id":"e5845d94-aaad-40bd-a309-2c86b48016b0","chapterNo":1,"content":"Abstract class","trainingSessions":[]},{"id":"5d7ba497-210a-4c35-a022-af99be31b084","chapterNo":2,"content":"Polymorphisme","trainingSessions":[]},{"id":"582cc360-6e4f-48c2-bbf4-84981c727796","chapterNo":1,"content":"Variables","trainingSessions":[]},{"id":"4a354fb0-01cf-481b-82ff-4f081832ac94","chapterNo":2,"content":"Functions","trainingSessions":[]},{"id":"e1aa739a-be27-4329-bfc1-d08220f5f4bc","chapterNo":1,"content":"Server side","trainingSessions":[]}]

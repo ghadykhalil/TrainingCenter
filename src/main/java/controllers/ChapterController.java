@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controllers;
 
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import models.Chapter;
+import models.TrainingSession;
 
 public class ChapterController {
 
@@ -93,5 +94,19 @@ public class ChapterController {
             }
         }
         System.out.println("Chapter not found: " + updatedChapter.getId());
+    }
+
+    public static List<TrainingSession> getTrainingSessions(Chapter chapter) {
+        List<TrainingSession> currentSessions = chapter.getTrainingSessions();
+        List<TrainingSession> actualSessions = new ArrayList<>();
+        for (TrainingSession trainingSession : TrainingSessionController.getTrainingSessions()) {
+            for (TrainingSession currentSession : currentSessions) {
+                if (trainingSession.getId().equals(currentSession.getId())) {
+                    actualSessions.add(trainingSession);
+                    break;
+                }
+            }
+        }
+        return actualSessions;
     }
 }

@@ -67,11 +67,11 @@ public class Chapter implements LearningMaterial {
         return content;
     }
 
-    public void add(TrainingSession trainingSession) {
+    public void addTrainingSession(TrainingSession trainingSession) {
         this.allTrainingSessions.add(trainingSession);
     }
 
-    public void remove(TrainingSession trainingSession) {
+    public void removeTrainingSession(TrainingSession trainingSession) {
         this.allTrainingSessions.remove(trainingSession);
     }
 

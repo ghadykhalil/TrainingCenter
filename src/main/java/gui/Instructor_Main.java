@@ -93,9 +93,19 @@ public class Instructor_Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         chapterJList = new javax.swing.JList<>();
         addChapter = new javax.swing.JButton();
-        syllabusOutput = new javax.swing.JLabel();
+        syllabusLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         newChapterNameTxt = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jLabel4 = new javax.swing.JLabel();
+        syllabusOutput = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        AddSession = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        viewSessions = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         welcomeLabel = new javax.swing.JLabel();
         dynamicUsername = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
@@ -182,7 +192,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                         .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(subjectsLable)
                             .addComponent(allsubjectsMainContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(826, Short.MAX_VALUE))
+                .addContainerGap(896, Short.MAX_VALUE))
         );
         subjectPanelLayout.setVerticalGroup(
             subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +213,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                         .addComponent(levelLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(subjectLvlFormattedTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(prerequisitesLabel))
                     .addGroup(subjectPanelLayout.createSequentialGroup()
                         .addComponent(subjectsLable)
@@ -271,13 +281,42 @@ public class Instructor_Main extends javax.swing.JFrame {
             }
         });
 
-        syllabusOutput.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        syllabusOutput.setText("Syallbus Existing:");
+        syllabusLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        syllabusLabel2.setText("Syallbus Existing:");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("New Chapter Name");
 
         newChapterNameTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jList1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane2.setViewportView(jList1);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("All Training Sessions");
+
+        syllabusOutput.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setText("Add Training Session");
+
+        jLabel2.setText("(select a chapter first to see ");
+
+        AddSession.setText("Add Session");
+        AddSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddSessionActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("or add sessions)");
+
+        viewSessions.setText("View Sessions");
+        viewSessions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewSessionsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -296,27 +335,40 @@ public class Instructor_Main extends javax.swing.JFrame {
                             .addComponent(subjectNameTxt2))
                         .addGap(32, 32, 32)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addNewSubjectLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(syllabusOutput)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(114, 114, 114)
+                                .addComponent(addNewSubjectLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(59, 59, 59))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(syllabusLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(syllabusOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, Short.MAX_VALUE)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(addNewSubjectLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(828, 828, 828))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(newChapterNameTxt, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(addChapter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
-                                .addGap(465, 465, 465))))
+                                        .addComponent(addChapter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                                    .addComponent(AddSession, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(viewSessions, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(addNewSubjectLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(367, 367, 367)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(262, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(addSyllabus, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,12 +377,37 @@ public class Instructor_Main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addNewSubjectLabel5)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(viewSessions, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(AddSession, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(newChapterNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(addChapter, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addNewSubjectLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(selectedSubjectCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(syllabusOutput))
+                            .addComponent(syllabusLabel2)
+                            .addComponent(syllabusOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(24, 24, 24)
                         .addComponent(addNewSubjectLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -338,24 +415,27 @@ public class Instructor_Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(addNewSubjectLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(subjectNameTxt2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(addNewSubjectLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(newChapterNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(addChapter, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(subjectNameTxt2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addSyllabus, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addGap(233, 233, 233))
         );
 
         mainTabbedPane.addTab("Subject Details", jPanel2);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1605, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 638, Short.MAX_VALUE)
+        );
+
+        mainTabbedPane.addTab("Session Details", jPanel1);
 
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         welcomeLabel.setText("Welcome!");
@@ -426,6 +506,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         refreshPrerequisitesList();
         refreshSubjectsList();
         refreshSubjectsCbx();
+        refreshChapterList();
     }//GEN-LAST:event_addNewSubjectActionPerformed
 
     private void refreshPrerequisitesList() {
@@ -464,20 +545,16 @@ public class Instructor_Main extends javax.swing.JFrame {
         Subject actualSubject = SubjectController.getSubjectById(subject.getId());
         Syllabus selectedSyllabus = actualSubject.getSyllabus();
         Syllabus actualSyllabus = SyllabusController.getSyllabusById(selectedSyllabus.getId());
-        List<Chapter> allChapters = new ArrayList<>();
         DefaultListModel<Chapter> chaptersList = new DefaultListModel<>();
         if (actualSyllabus != null) {
-            allChapters = actualSyllabus.getChapters();
-
             for (Chapter chapter : ChapterController.getChapters()) {
                 chaptersList.addElement(chapter);
             }
             chapterJList.setModel(chaptersList);
         } else {
             chapterJList.setModel(chaptersList);
-
         }
-        
+
     }
 
 
@@ -533,7 +610,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         Syllabus currentSyllabus = subjectChanged.getSyllabus();
         DefaultListModel<Chapter> chapterListModel = new DefaultListModel<>();
         if (currentSyllabus != null) {
-            syllabusOutput.setText(currentSyllabus.getContent());
+            syllabusOutput.setText("Yes");
             Syllabus actualSyllabus = SyllabusController.getSyllabusById(currentSyllabus.getId());
             List<Chapter> allChapters = new ArrayList<>();
             if (actualSyllabus.getChapters() != null) {
@@ -544,6 +621,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                 chapterJList.setModel(chapterListModel);
             }
         } else {
+            syllabusOutput.setText("No");
             chapterJList.setModel(chapterListModel);
         }
     }//GEN-LAST:event_selectedSubjectCbxActionPerformed
@@ -556,21 +634,41 @@ public class Instructor_Main extends javax.swing.JFrame {
             Syllabus selectedSyllabus = actualSubject.getSyllabus();
             Syllabus actualSyllabus = SyllabusController.getSyllabusById(selectedSyllabus.getId());
             List<Chapter> allChapters = new ArrayList<>();
+            DefaultListModel<Chapter> chapterListModel = new DefaultListModel<>();
+
             if (actualSyllabus.getChapters() != null) {
                 allChapters = actualSyllabus.getChapters();
                 Chapter chapter = new Chapter(allChapters.size() + 1, newChapterNameTxt.getText());
                 actualSyllabus.add(chapter);
                 SyllabusController.updateSyllabus(actualSyllabus);
                 ChapterController.addChapter(chapter);
+                allChapters = actualSyllabus.getChapters();
+                for (Chapter chap : allChapters) {
+                    chapterListModel.addElement(chap);
+                }
+                chapterJList.setModel(chapterListModel);
             } else {
                 Chapter chapter = new Chapter(1, newChapterNameTxt.getText());
                 actualSyllabus.add(chapter);
                 SyllabusController.updateSyllabus(actualSyllabus);
                 ChapterController.addChapter(chapter);
+                for (Chapter chap : allChapters) {
+                    chapterListModel.addElement(chap);
+                }
+                chapterJList.setModel(chapterListModel);
             }
         }
-
     }//GEN-LAST:event_addChapterActionPerformed
+
+    private void AddSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddSessionActionPerformed
+        // TODO add your handling code here:
+        Chapter selectedChapter = chapterJList.getSelectedValue();
+        
+    }//GEN-LAST:event_AddSessionActionPerformed
+
+    private void viewSessionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSessionsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_viewSessionsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -615,6 +713,7 @@ public class Instructor_Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddSession;
     private javax.swing.JButton addChapter;
     private javax.swing.JButton addNewSubject;
     private javax.swing.JLabel addNewSubjectLabel;
@@ -631,9 +730,16 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JLabel dynamicUsername;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel levelLabel;
     private javax.swing.JButton logoutButton;
     private javax.swing.JTabbedPane mainTabbedPane;
@@ -649,7 +755,9 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JTextField subjectNameTxt2;
     private javax.swing.JPanel subjectPanel;
     private javax.swing.JLabel subjectsLable;
+    private javax.swing.JLabel syllabusLabel2;
     private javax.swing.JLabel syllabusOutput;
+    private javax.swing.JButton viewSessions;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

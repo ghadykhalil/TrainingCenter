@@ -79,4 +79,9 @@ public class TrainingSession {
         this.children = children;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    
 }
