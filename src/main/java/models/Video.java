@@ -4,13 +4,13 @@
  */
 package models;
 
-import dbWrapper.IdGenerator;
+import helpers.IdGenerator;
 
 /**
  *
  * @author User
  */
-public class Video implements LearningMaterial {
+public class Video {
 
     private String id;
     private String path;
@@ -23,23 +23,8 @@ public class Video implements LearningMaterial {
         path = c;
     }
 
-    @Override
-    public void display() {
-
-    }
-
     public String getId() {
         return this.id;
-    }
-
-    @Override
-    public void setContent(String content) {
-        this.path = content;
-    }
-
-    @Override
-    public String getContent() {
-        return path;
     }
 
 }

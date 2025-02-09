@@ -4,44 +4,52 @@
  */
 package models;
 
-import dbWrapper.IdGenerator;
-import java.util.ArrayList;
-import java.util.List;
+import helpers.IdGenerator;
 
 /**
  *
  * @author User
  */
-public class Document implements LearningMaterial {
+public class Document {
 
     private String id;
     private String path;
+    private String filename;
 
     public Document() {
         id = IdGenerator.generateId();
     }
 
-    public Document(String c) {
+    public Document(String c, String filename) {
+        this();
         path = c;
+        this.filename = filename;
     }
 
     public String getId() {
         return this.id;
     }
 
-    @Override
     public void display() {
 
     }
 
-    @Override
-    public void setContent(String content) {
-        this.path = content;
-    }
-
-    @Override
-    public String getContent() {
+    public String getPath() {
         return path;
     }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+    
+    
 
 }

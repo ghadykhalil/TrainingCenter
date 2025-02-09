@@ -170,8 +170,6 @@ public class Login extends javax.swing.JFrame {
                 for (Student student : students) {
                     studentModel.addElement(student);
                 }
-
-                // Set the model to jComboBox2
                 dataCbx.setModel(studentModel);
                 break;
             case "Instructor":

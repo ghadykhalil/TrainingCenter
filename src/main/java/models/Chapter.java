@@ -4,7 +4,7 @@ package models;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-import dbWrapper.IdGenerator;
+import helpers.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,26 +12,28 @@ import java.util.List;
  *
  * @author User
  */
-public class Chapter implements LearningMaterial {
+public class Chapter {
 
     private String id;
     private int chapterNo;
-    private String content;
-    private List<TrainingSession> allTrainingSessions = new ArrayList<>();
+    private String chapterTitle;
+    private List<String> objectives;
+    private List<Document> documents;
+    private List<Video> videos;
+    private List<Test> tests;
 
     public Chapter() {
         id = IdGenerator.generateId();
+        objectives = new ArrayList<>();
+        documents = new ArrayList<>();
+        videos = new ArrayList<>();
+        tests = new ArrayList<>();
     }
 
-    public Chapter(int chapterNo, String content) {
+    public Chapter(int chapterNo, String chapterTitle) {
         this();
         this.chapterNo = chapterNo;
-        this.content = content;
-    }
-
-    public Chapter(String c) {
-        this();
-        this.content = c;
+        this.chapterTitle = chapterTitle;
     }
 
     public String getId() {
@@ -48,39 +50,47 @@ public class Chapter implements LearningMaterial {
 
     @Override
     public String toString() {
-        return "Chapter " + this.chapterNo + " Description: " + this.getContent();
+        return "Chapter " + this.chapterNo+ " "+this.chapterTitle;
     }
 
-    @Override
-    public void display() {
-        System.out.println("Chapter Content: " + content);
-
+    public List<String> getObjective() {
+        return objectives;
     }
 
-    @Override
-    public void setContent(String content) {
-        this.content = content;
+    public void setObjective(List<String> objectives) {
+        this.objectives = objectives;
     }
 
-    @Override
-    public String getContent() {
-        return content;
+    public List<Document> getDocuments() {
+        return documents;
     }
 
-    public void addTrainingSession(TrainingSession trainingSession) {
-        this.allTrainingSessions.add(trainingSession);
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
-    public void removeTrainingSession(TrainingSession trainingSession) {
-        this.allTrainingSessions.remove(trainingSession);
+    public List<Video> getVideos() {
+        return videos;
     }
 
-    public List<TrainingSession> getTrainingSessions() {
-        return this.allTrainingSessions;
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 
-    public void setTrainingSession(List<TrainingSession> trainingSessions) {
-        this.allTrainingSessions = trainingSessions;
+    public List<Test> getTests() {
+        return tests;
+    }
+
+    public void setTests(List<Test> tests) {
+        this.tests = tests;
+    }
+
+    public String getChapterTitle() {
+        return chapterTitle;
+    }
+
+    public void setChapterTitle(String chapterTitle) {
+        this.chapterTitle = chapterTitle;
     }
 
 }

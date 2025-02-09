@@ -4,11 +4,9 @@
  */
 package models;
 
-/**
- *
- * @author User
- */
 public interface LearningMaterial {
+
+    String getId();
 
     void display();
 

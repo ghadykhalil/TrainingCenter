@@ -4,7 +4,7 @@
  */
 package models;
 
-import dbWrapper.IdGenerator;
+import helpers.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author User
  */
-public class Syllabus implements LearningMaterial {
+public class Syllabus{
 
     private String id;
     private String title;
@@ -33,7 +33,7 @@ public class Syllabus implements LearningMaterial {
     @Override
     public String toString() {
         List<String> output = new ArrayList<>();
-        for (LearningMaterial child : allChapters) {
+        for (Chapter child : allChapters) {
             output.add(child.toString() + "\n");
         }
         return this.content + output;
@@ -51,20 +51,10 @@ public class Syllabus implements LearningMaterial {
         return allChapters;
     }
 
-    @Override
-    public void display() {
-        System.out.println("Objective Content: " + content);
-        for (LearningMaterial child : allChapters) {
-            child.display();
-        }
-    }
-
-    @Override
     public void setContent(String content) {
         this.content = content;
     }
 
-    @Override
     public String getContent() {
         return content;
     }

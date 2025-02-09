@@ -4,7 +4,7 @@
  */
 package models;
 
-import dbWrapper.IdGenerator;
+import helpers.IdGenerator;
 import java.util.Date;
 
 /**
