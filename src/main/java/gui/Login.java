@@ -133,6 +133,15 @@ public class Login extends javax.swing.JFrame {
         if (userType == null || userType.equals("Select...")) {
             JOptionPane.showMessageDialog(null, "Please Select User Type", "No Type Selected", 2);
         } else if (userType.equals("Student")) {
+            Student student = (Student) dataCbx.getSelectedItem();
+            if (student.getOnlineStatus()) {
+                JOptionPane.showMessageDialog(null, "User Already Logged in!", "Dublicate Login error!", 2);
+            } else {
+                Student_Main IM = new Student_Main(student);
+                IM.setVisible(true);
+                student.setOnlineStatus(true);
+                StudentController.updateStudent(student);
+            }
 
         } else if (userType.equals("Instructor")) {
             Instructor instructor = (Instructor) dataCbx.getSelectedItem();

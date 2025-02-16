@@ -12,12 +12,4 @@ public interface PaymentMethod {
 
     void pay();
 
-    boolean getPaymentStatus();
-
-    void setPaymentStatus(boolean paymentStatus);
-
-    double getAmount();
-
-    void setAmount(double amount);
-
 }

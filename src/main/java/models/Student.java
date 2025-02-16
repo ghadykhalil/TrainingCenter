@@ -5,9 +5,6 @@
 package models;
 
 import helpers.IdGenerator;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author User
@@ -18,7 +15,6 @@ public class Student implements User, Observer {
     private String username;
     private String name;
     private boolean onlineStatus;
-    private List<Enroll> enrollments = new ArrayList<>();
 
     public Student() {
         id = IdGenerator.generateId();
@@ -70,18 +66,6 @@ public class Student implements User, Observer {
     @Override
     public String toString() {
         return this.username;
-    }
-
-    public List<Enroll> getEnrollments() {
-        return enrollments;
-    }
-
-    public void addEnrollment(Enroll enrollment) {
-        enrollments.add(enrollment);
-    }
-
-    public void removeEnrollment(Enroll enrollment) {
-        enrollments.remove(enrollment);
     }
 
     @Override

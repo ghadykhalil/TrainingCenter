@@ -4,6 +4,7 @@
  */
 package models;
 
+import enums.enrollStatus;
 import helpers.IdGenerator;
 import java.util.Date;
 
@@ -11,16 +12,10 @@ import java.util.Date;
  *
  * @author User
  */
-enum enrollStatus {
-    Active,
-    Completed,
-    Dropped
-}
 
 public class Enroll {
 
     private String id;
-    private Date enrollDate;
     private enrollStatus status;
     private Payment payment;
     private Student student;
@@ -30,21 +25,12 @@ public class Enroll {
         id = IdGenerator.generateId();
     }
 
-    public Enroll(Date enrollDate, enrollStatus status, Student student, Subject subject, Payment payment) {
+    public Enroll(enrollStatus status, Student student, Subject subject) {
         this();
-        this.enrollDate = enrollDate;
         this.status = status;
         this.student = student;
         this.subject = subject;
-        this.payment = payment;
-    }
-
-    public Date getEnrollDate() {
-        return enrollDate;
-    }
-
-    public void setEnrollDate(Date enrollDate) {
-        this.enrollDate = enrollDate;
+        this.payment = new Payment(subject.getSubjectPrice());
     }
 
     public enrollStatus getStatus() {

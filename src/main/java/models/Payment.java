@@ -11,22 +11,26 @@ import java.util.Date;
  *
  * @author User
  */
+enum paymentMethod {
+    VisaCard,
+    Paypal,
+}
+
 public class Payment {
 
     private String id;
     private double amount;
     private boolean status;
-    private Date paymentDate;
+    private paymentMethod paymentMethod;
+    private String paymentMethodId;
 
     public Payment() {
         id = IdGenerator.generateId();
     }
 
-    public Payment(double amount, boolean status, Date paymentDate) {
-        this();
-        this.amount = amount;
+    public Payment(double amount) {
         this.status = false;
-        this.paymentDate = paymentDate;
+        this.amount = amount;
     }
 
     public double getAmount() {
@@ -37,20 +41,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
 }

@@ -18,9 +18,9 @@ public class Subject {
     private String name;
     private String desciption;
     private int level;
-    private List<Enroll> enrollments = new ArrayList<>();
     private List<Subject> prerequisites = new ArrayList<>();
     private Syllabus syllabus;
+    private double subjectPrice;
 
     public Subject() {
         id = IdGenerator.generateId();
@@ -28,18 +28,20 @@ public class Subject {
 
     ;
     
-    public Subject(String n, String d, int l) {
+    public Subject(String n, String d, int l, double subjectPrice) {
         this();
         this.name = n;
         this.desciption = d;
         this.level = l;
+        this.subjectPrice = subjectPrice;
     }
 
-    public Subject(String n, String d, int l, Syllabus syllabus) {
+    public Subject(String n, String d, int l, double subjectPrice, Syllabus syllabus) {
         this();
         this.name = n;
         this.desciption = d;
         this.level = l;
+        this.subjectPrice = subjectPrice;
         this.syllabus = syllabus;
     }
 
@@ -76,18 +78,6 @@ public class Subject {
         this.level = level;
     }
 
-    public List<Enroll> getEnrollments() {
-        return enrollments;
-    }
-
-    public void addEnrollment(Enroll enrollment) {
-        enrollments.add(enrollment);
-    }
-
-    public void removeEnrollment(Enroll enrollment) {
-        enrollments.remove(enrollment);
-    }
-
     public List<Subject> getPrerequisites() {
         return prerequisites;
     }
@@ -111,7 +101,14 @@ public class Subject {
     public void setSyllabus(Syllabus syllabus) {
         this.syllabus = syllabus;
     }
-    
-    
 
+    public double getSubjectPrice() {
+        return subjectPrice;
+    }
+
+    public void setSubjectPrice(double subjectPrice) {
+        this.subjectPrice = subjectPrice;
+    }
+
+    
 }

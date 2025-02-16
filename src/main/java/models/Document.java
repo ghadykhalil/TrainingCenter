@@ -30,8 +30,9 @@ public class Document {
         return this.id;
     }
 
-    public void display() {
-
+    @Override
+    public String toString(){
+        return this.filename;
     }
 
     public String getPath() {

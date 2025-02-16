@@ -15,8 +15,6 @@ public class Paypal implements PaymentMethod {
     private String id;
     private String username;
     private String password;
-    private boolean paymentStatus;
-    private double amount;
 
     public Paypal() {
         id = IdGenerator.generateId();
@@ -27,23 +25,11 @@ public class Paypal implements PaymentMethod {
         this();
         this.username = username;
         this.password = password;
-        this.paymentStatus = paymentStatus;
-        this.amount = amount;
     }
 
     @Override
     public void pay() {
         //authentication logic (just validation)
-    }
-
-    @Override
-    public boolean getPaymentStatus() {
-        return this.paymentStatus;
-    }
-
-    @Override
-    public void setPaymentStatus(boolean paymentStatus) {
-        this.paymentStatus = paymentStatus;
     }
 
     public String getUsername() {
@@ -60,16 +46,6 @@ public class Paypal implements PaymentMethod {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public double getAmount() {
-        return amount;
-    }
-
-    @Override
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 
 }

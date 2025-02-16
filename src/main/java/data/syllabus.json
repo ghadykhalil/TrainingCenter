@@ -1,1 +1,37 @@
-[{"id":"b2c58c11-46ae-4296-a5bc-89cd2881abf8","title":"Syllabus 1","content":"Overall","chapters":[{"id":"7b2f3c30-80eb-4b75-8363-019538654eb2","chapterNo":1,"chapterTitle":"Variables","documents":[],"videos":[],"tests":[],"objective":[]},{"id":"fd20d32e-4b79-4006-9050-012dd1b718f9","chapterNo":2,"chapterTitle":"Functions","documents":[],"videos":[],"tests":[],"objective":[]}]},{"id":"8e9c4fb7-388d-405c-adb8-116721bc8975","title":"JAVA 2","content":"Syllabus","chapters":[]},{"id":"5feec0ec-3f02-4546-bc0f-971bbe0f752e","title":"Calculus 1 syllabus","content":"test","chapters":[]},{"id":"edbac63c-e3a4-4513-97e0-c408e447093d","title":"syll php","content":"basics of php","chapters":[]}]
+[{
+        "id": "b2c58c11-46ae-4296-a5bc-89cd2881abf8",
+        "title": "Syllabus 1",
+        "content": "Overall",
+        "chapters": [{
+                "id": "7b2f3c30-80eb-4b75-8363-019538654eb2",
+                "chapterNo": 1,
+                "chapterTitle": "Variables",
+                "documents": [],
+                "videos": [],
+                "tests": [],
+                "objectives": []
+            }, {
+                "id": "fd20d32e-4b79-4006-9050-012dd1b718f9",
+                "chapterNo": 2,
+                "chapterTitle": "Functions",
+                "documents": [],
+                "videos": [],
+                "tests": [],
+                "objectives": []
+            }]
+    }, {
+        "id": "8e9c4fb7-388d-405c-adb8-116721bc8975",
+        "title": "JAVA 2",
+        "content": "Syllabus",
+        "chapters": []
+    }, {
+        "id": "5feec0ec-3f02-4546-bc0f-971bbe0f752e",
+        "title": "Calculus 1 syllabus",
+        "content": "test",
+        "chapters": []
+    }, {
+        "id": "edbac63c-e3a4-4513-97e0-c408e447093d",
+        "title": "syll php",
+        "content": "basics of php",
+        "chapters": []
+    }]

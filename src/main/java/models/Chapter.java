@@ -50,14 +50,14 @@ public class Chapter {
 
     @Override
     public String toString() {
-        return "Chapter " + this.chapterNo+ " "+this.chapterTitle;
+        return "Chapter " + this.chapterNo + " " + this.chapterTitle;
     }
 
-    public List<String> getObjective() {
+    public List<String> getObjectives() {
         return objectives;
     }
 
-    public void setObjective(List<String> objectives) {
+    public void setObjectives(List<String> objectives) {
         this.objectives = objectives;
     }
 
@@ -93,4 +93,11 @@ public class Chapter {
         this.chapterTitle = chapterTitle;
     }
 
+    public void addObjective(String objective) {
+        this.objectives.add(objective);
+    }
+
+    public void addDocument(Document document) {
+        this.documents.add(document);
+    }
 }

@@ -81,5 +81,22 @@ public class StudentController {
         }
         return false;
     }
+    
+    public static void updateStudent(Student updatedStudent) {
+        List<Student> allStudents = getStudents();
+        for (int i = 0; i < allStudents.size(); i++) {
+            Student student = allStudents.get(i);
+            if (student.getId().equals(updatedStudent.getId())) {
+                allStudents.set(i, updatedStudent);
+                try {
+                    json.writeData(STUDENT_FILE, allStudents);
+                    return;
+                } catch (IOException e) {
+                    System.out.println("Error updating isntructors: " + e.getMessage());
+                }
+            }
+        }
+        System.out.println("Answer not found: " + updatedStudent.getId());
+    }
 
 }

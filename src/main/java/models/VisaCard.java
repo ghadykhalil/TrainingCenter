@@ -16,9 +16,6 @@ public class VisaCard implements PaymentMethod {
     private String id;
     private String cardNumber;
     private String threeDigitCode;
-    private Date expiryDate;
-    private boolean paymentStatus = false;
-    double amount;
 
     public VisaCard() {
         id = IdGenerator.generateId();
@@ -27,27 +24,15 @@ public class VisaCard implements PaymentMethod {
 
     ;
 
-    public VisaCard(String cardNumber, String threeDigitCode, Date expiryDate, double amount) {
+    public VisaCard(String cardNumber, String threeDigitCode) {
         this();
         this.cardNumber = cardNumber;
         this.threeDigitCode = threeDigitCode;
-        this.expiryDate = expiryDate;
-        this.amount = amount;
     }
 
     @Override
     public void pay() {
         //authentication logic (just validation)
-    }
-
-    @Override
-    public boolean getPaymentStatus() {
-        return this.paymentStatus;
-    }
-
-    @Override
-    public void setPaymentStatus(boolean paymentStatus) {
-        this.paymentStatus = paymentStatus;
     }
 
     public String getCardNumber() {
@@ -64,24 +49,6 @@ public class VisaCard implements PaymentMethod {
 
     public void setThreeDigitCode(String threeDigitCode) {
         this.threeDigitCode = threeDigitCode;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    @Override
-    public double getAmount() {
-        return amount;
-    }
-
-    @Override
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 
 }

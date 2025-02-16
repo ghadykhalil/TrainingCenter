@@ -1,5 +1,6 @@
 package helpers;
 
+import controllers.ChapterController;
 import controllers.DocumentController;
 import models.Document;
 
@@ -12,32 +13,36 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import models.Chapter;
 
-public class FileUploader extends JFrame {
+public class FileUploader extends JPanel {
 
     private JFileChooser fileChooser;
     private JLabel filePathLabel;
     private JButton confirmButton;
     private File selectedFile;
-    private Path destinationPath;
+    private String chapterId; // Store chapter ID
 
-    public FileUploader() {
-        setTitle("File Uploader");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
-        setSize(400, 200);
+    public FileUploader(String chapterId) {
+        this.chapterId = chapterId;
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding
 
         fileChooser = new JFileChooser();
         filePathLabel = new JLabel("No file selected.");
-        confirmButton = new JButton("Confirm");
+        confirmButton = new JButton("Confirm Upload");
         confirmButton.setEnabled(false);
-
         JButton browseButton = new JButton("Browse");
 
-        // Browse Button - Select File
+        // Browse Button Action
         browseButton.addActionListener((ActionEvent e) -> {
-            int returnValue = fileChooser.showOpenDialog(null);
+            int returnValue = fileChooser.showOpenDialog(this);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 selectedFile = fileChooser.getSelectedFile();
                 filePathLabel.setText("Selected: " + selectedFile.getName());
@@ -45,39 +50,52 @@ public class FileUploader extends JFrame {
             }
         });
 
-        // Confirm Button - Save File
+        // Confirm Button Action
         confirmButton.addActionListener((ActionEvent e) -> {
             if (selectedFile != null) {
                 try {
-                    saveFile(selectedFile);
+                    saveFile(selectedFile, ChapterController.getChapterById(chapterId));
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, "Error saving file: " + ex.getMessage(),
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(FileUploader.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
 
-        add(browseButton);
-        add(filePathLabel);
-        add(confirmButton);
-        setVisible(true);
+        // Add components to the panel
+        gbc.gridy = 0;
+        add(browseButton, gbc);
+
+        gbc.gridy = 1;
+        add(filePathLabel, gbc);
+
+        gbc.gridy = 2;
+        add(confirmButton, gbc);
     }
 
-    private void saveFile(File file) throws IOException {
-        // Define storage directory and ensure it exists
-        String storageDir = "src/main/java/data/documents";
-        Files.createDirectories(Paths.get(storageDir));
+    private void saveFile(File file, Chapter chapter) throws IOException {
+        Path storageDir = Paths.get("src", "main", "java", "data", "documents");
+        Files.createDirectories(storageDir); // Ensure the directory exists
 
-        // Define file destination path
-        destinationPath = Paths.get(storageDir, file.getName());
+        Path destinationPath = storageDir.resolve(file.getName());
 
-        // Copy file to destination
-        Files.copy(file.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        if (!file.exists()) {
+            return;
+        }
 
-        // Create document metadata and save it to database
-        Document document = new Document(file.getName(), destinationPath.toString());
+        try {
+            Files.copy(file.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String relativePath = "src/main/java/data/documents/" + file.getName();
+        Document document = new Document(relativePath, file.getName());
         DocumentController.addDocument(document);
-
-// Notify user
+        chapter.addDocument(document);
+        ChapterController.updateChapter(chapter);
+        
+        
+        JOptionPane.showMessageDialog(null, "File uploaded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
+
 }

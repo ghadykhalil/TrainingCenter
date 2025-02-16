@@ -19,7 +19,7 @@ public class Meeting implements Observable {
     private Date dateTime;
     private double duration;
     private String topic;
-    private List<Observer> observers = new ArrayList<>();
+    private transient List<Observer> observers = new ArrayList<>();
     private List<Student> admittedStudents = new ArrayList<>();
 
     public Meeting() {
