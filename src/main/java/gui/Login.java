@@ -140,6 +140,7 @@ public class Login extends javax.swing.JFrame {
                 Student_Main IM = new Student_Main(student);
                 IM.setVisible(true);
                 student.setOnlineStatus(true);
+                student.setStudentMainScreen(IM);
                 StudentController.updateStudent(student);
             }
 
@@ -235,6 +236,32 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
+    }
+
+    public void logoutAllUsers() {
+        // Log out all students
+        List<Student> students = StudentController.getStudents();
+        for (Student student : students) {
+            if (student.getOnlineStatus()) {
+                student.setOnlineStatus(false);
+                StudentController.updateStudent(student);
+            }
+        }
+
+        // Log out all instructors
+        List<Instructor> instructors = InstructorController.getInstructors();
+        for (Instructor instructor : instructors) {
+            if (instructor.getOnlineStatus()) {
+                instructor.setOnlineStatus(false);
+                InstructorController.updateInstructor(instructor);
+            }
+        }
+    }
+
+    @Override
+    public void dispose() {
+        logoutAllUsers();  // Log out all users when the login window is disposed
+        super.dispose();    // Call the original dispose method to perform the actual disposal
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

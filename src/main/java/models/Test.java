@@ -1,31 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 import helpers.IdGenerator;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author User
- */
 public class Test {
 
     private String id;
     private String title;
-    private double duration;
+    private List<TrueOrFalseQuestion> trueOrFalseQuestions; // List of True/False questions
+    private List<QCMQuestion> qcmQuestions; // List of QCM questions
+    private List<StudentAnswer> studentAnswers; // List of student responses
+    private double totalMaxGrade; // The maximum total grade, e.g., 20
 
     public Test() {
-        id = IdGenerator.generateId();
-
+        this.id = IdGenerator.generateId();
+        this.trueOrFalseQuestions = new ArrayList<>();
+        this.qcmQuestions = new ArrayList<>();
+        this.studentAnswers = new ArrayList<>();
     }
 
-    public Test(String title, double duration, double note) {
+    public Test(String title, double totalMaxGrade) {
         this();
         this.title = title;
-        this.duration = duration;
-        this.note = note;
+        this.totalMaxGrade = totalMaxGrade; // The desired total grade (e.g., 20)
     }
 
     public String getTitle() {
@@ -36,24 +34,83 @@ public class Test {
         this.title = title;
     }
 
-    public double getDuration() {
-        return duration;
+    public String getId() {
+        return id;
     }
 
-    public void setDuration(double duration) {
-        this.duration = duration;
+    public List<QCMQuestion> getQcmQuestions() {
+        return qcmQuestions;
     }
 
-    public double getNote() {
-        return note;
+    public void setQcmQuestions(List<QCMQuestion> qcmQuestions) {
+        this.qcmQuestions = qcmQuestions;
     }
 
-    public void setNote(double note) {
-        this.note = note;
+    public double getTotalMaxGrade() {
+        return totalMaxGrade;
     }
-    private double note;
 
-    private double calculateNote() {
-        return this.note;
+    public void setTotalMaxGrade(double totalMaxGrade) {
+        this.totalMaxGrade = totalMaxGrade;
+    }
+    
+    
+
+    public List<TrueOrFalseQuestion> getTrueOrFalseQuestions() {
+        return trueOrFalseQuestions;
+    }
+
+    public void addTrueOrFalseQuestion(TrueOrFalseQuestion question) {
+        this.trueOrFalseQuestions.add(question);
+    }
+
+    public List<QCMQuestion> getQCMQuestions() {
+        return qcmQuestions;
+    }
+
+    public void addQCMQuestion(QCMQuestion question) {
+        this.qcmQuestions.add(question);
+    }
+
+    public List<StudentAnswer> getStudentAnswers() {
+        return studentAnswers;
+    }
+
+    public void addStudentAnswer(StudentAnswer answer) {
+        studentAnswers.add(answer);
+    }
+
+    // ✅ Method to get the grade as a fraction (e.g., "13/20") with normalized total
+    // Method to get the specific grade for a student as a fraction (e.g., "13/20")
+    public String getStudentGradeAsFraction(Student student) {
+        double earnedGrade = 0.0;
+        double totalGrade = 0.0;
+
+        // Loop through the True/False questions and accumulate the grade for the specific student
+        for (StudentAnswer answer : studentAnswers) {
+            if (answer.getStudent().equals(student)) {
+                // If it's a True/False question, add the earned grade
+                if (answer.getTrueOrFalseQuestion() != null) {
+                    earnedGrade += answer.getEarnedGrade();
+                    totalGrade += answer.getTrueOrFalseQuestion().getGrade();
+                }
+                // If it's a QCM question, add the earned grade
+                if (answer.getQCMQuestion() != null) {
+                    earnedGrade += answer.getEarnedGrade();
+                    totalGrade += answer.getQCMQuestion().getGrade();
+                }
+            }
+        }
+
+        // Normalize the earned grade to the test's max grade (e.g., 20 or 30)
+        double normalizedEarnedGrade = (earnedGrade / totalGrade) * totalMaxGrade;
+
+        // Return the grade as a fraction (e.g., "13/20")
+        return String.format("%.2f", normalizedEarnedGrade) + "/" + totalMaxGrade;
+    }
+
+    @Override
+    public String toString() {
+        return this.title + " Weight: " + this.getTotalMaxGrade();
     }
 }

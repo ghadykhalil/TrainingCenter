@@ -1,21 +1,16 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
 
+import enums.paymentMethod;
 import helpers.IdGenerator;
-import java.util.Date;
 
 /**
  *
  * @author User
  */
-enum paymentMethod {
-    VisaCard,
-    Paypal,
-}
-
 public class Payment {
 
     private String id;
@@ -29,6 +24,7 @@ public class Payment {
     }
 
     public Payment(double amount) {
+        this();
         this.status = false;
         this.amount = amount;
     }
@@ -47,6 +43,36 @@ public class Payment {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public paymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(paymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+
+    }
+
+    public String getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public void setPaymentMethodId(String paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return this.amount+ " $";
     }
 
 }

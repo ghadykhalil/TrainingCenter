@@ -1,21 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-/**
- *
- * @author User
- */
 public class TrueOrFalseFactory implements QuestionFactory {
 
     @Override
-    public void createQuestion() {
+    public TrueOrFalseQuestion createQuestion(String questionText, double grade) {
+        return new TrueOrFalseQuestion(questionText, false, grade); // Default false, can be updated later
     }
 
     @Override
-    public void createSolution() {
+    public TrueOrFalseResponse createSolution(Object selectedAnswer) {
+        return new TrueOrFalseResponse((boolean) selectedAnswer);
     }
-    
 }

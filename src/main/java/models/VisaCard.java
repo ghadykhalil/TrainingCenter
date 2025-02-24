@@ -32,7 +32,7 @@ public class VisaCard implements PaymentMethod {
 
     @Override
     public void pay() {
-        //authentication logic (just validation)
+        
     }
 
     public String getCardNumber() {
@@ -51,4 +51,13 @@ public class VisaCard implements PaymentMethod {
         this.threeDigitCode = threeDigitCode;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    
 }

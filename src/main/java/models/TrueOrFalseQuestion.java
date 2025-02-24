@@ -1,30 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import helpers.IdGenerator;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- *
- * @author User
- */
 public class TrueOrFalseQuestion implements Question {
 
     private String id;
     private String questionText;
-    private List<String> choices = new ArrayList<>();
+    private boolean correctAnswer; // Stores the correct answer (true/false)
+    private double grade; // Grade for the question
+    
+    @JsonIgnore
+    private transient TrueOrFalseQuestionVisitor visitor;
 
     public TrueOrFalseQuestion() {
-        id = IdGenerator.generateId();
+        this.id = IdGenerator.generateId();
     }
 
-    public TrueOrFalseQuestion(String questionText) {
+    public TrueOrFalseQuestion(String questionText, boolean correctAnswer, double grade) {
         this();
         this.questionText = questionText;
+        this.correctAnswer = correctAnswer;
+        this.grade = grade;
     }
 
     @Override
@@ -32,16 +29,55 @@ public class TrueOrFalseQuestion implements Question {
         return questionText;
     }
 
+    @Override
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
     }
 
-    public void addChoice(String choice) {
-        this.choices.add(choice);
+    public String getId() {
+        return id;
     }
 
-    public List<String> getChoices() {
-        return this.choices;
+    public double getGrade() {
+        return grade;
     }
 
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
+    public boolean getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(boolean correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    /**
+     * Evaluates the student's response using the Interpreter pattern.
+     */
+    public double evaluate(TrueOrFalseResponse studentResponse) {
+        boolean isCorrect = studentResponse.evaluate(correctAnswer);
+        return isCorrect ? grade : 0.0;
+    }
+
+    public String accept(TrueOrFalseQuestionVisitor visitor) {
+        return visitor.visitTrueOrFalseQuestion(this);
+    }
+    
+    @Override
+    public String toString(){
+        return this.accept(visitor);
+    }
+
+    public TrueOrFalseQuestionVisitor getVisitor() {
+        return visitor;
+    }
+
+    public void setVisitor(TrueOrFalseQuestionVisitor visitor) {
+        this.visitor = visitor;
+    }
+    
+    
 }

@@ -41,6 +41,43 @@ public class EnrollController {
     }
 
     public static boolean addEnrollment(Enroll enroll) {
+        Student student = enroll.getStudent();
+        Subject subject = enroll.getSubject();
+
+        // Fetch only the enrollments for this specific student
+        List<Enroll> studentEnrollments = getEnrollmentsByStudent(student.getId());
+
+        // Check if this student is already enrolled in this subject
+        for (Enroll existingEnroll : studentEnrollments) {
+            if (existingEnroll.getSubject().getId().equals(subject.getId())
+                    && (existingEnroll.getStatus() == enrollStatus.Active
+                    || existingEnroll.getStatus() == enrollStatus.PendingPayment)) {
+                JOptionPane.showMessageDialog(null,
+                        "You are already enrolled in this subject!",
+                        "Enrollment Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
+        // Check if the student has completed all prerequisites
+        List<Enroll> completedEnrollments = getEnrollmentsByStudentAndStatus(student.getId(), enrollStatus.Completed);
+        List<Subject> completedSubjects = new ArrayList<>();
+        for (Enroll e : completedEnrollments) {
+            completedSubjects.add(e.getSubject());
+        }
+
+        for (Subject prerequisite : subject.getPrerequisites()) {
+            if (!completedSubjects.contains(prerequisite)) {
+                JOptionPane.showMessageDialog(null,
+                        "You need to finish the prerequisite: " + prerequisite.getName() + " " + prerequisite.getLevel(),
+                        "Enrollment Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return false; // Prevent enrollment
+            }
+        }
+
+        // Save the enrollment
         boolean success = false;
         try {
             json.saveData(ENROLL_FILE, enroll);
@@ -145,4 +182,68 @@ public class EnrollController {
         return results;
     }
 
+    public static List<Subject> getAvailableSubjects(Student student) {
+        List<Subject> enrolledSubjects = new ArrayList<>();
+        List<Subject> availableSubjects = SubjectController.getSubjects();
+        for (Enroll enroll : getEnrollments()) {
+            if (enroll.getStudent().getId().equals(student.getId())) {
+                enrolledSubjects.add(enroll.getSubject());
+            }
+        }
+        availableSubjects.removeAll(enrolledSubjects);
+        return availableSubjects;
+    }
+
+    public static List<Enroll> getEnrollmentsByStudent(String studentId) {
+        List<Enroll> results = new ArrayList<>();
+        for (Enroll enroll : getEnrollments()) {
+            if (enroll.getStudent().getId().equals(studentId)) {
+                results.add(enroll);
+            }
+        }
+        return results;
+    }
+
+    public static List<Enroll> getDuePaymentsForStudent(String studentId) {
+        List<Enroll> dueEnrollments = new ArrayList<>();
+        // Get all enrollments for the student
+        List<Enroll> studentEnrollments = getEnrollmentsByStudent(studentId);
+        for (Enroll enroll : studentEnrollments) {
+            Payment payment = enroll.getPayment();
+            // Check if payment is unpaid (status is false)
+            if (payment != null && !payment.getStatus()) {
+                dueEnrollments.add(enroll);
+            }
+        }
+        return dueEnrollments;
+    }
+
+    public static List<Enroll> getActiveCourses(String studentId) {
+        List<Enroll> dueEnrollments = new ArrayList<>();
+        // Get all enrollments for the student
+        List<Enroll> studentEnrollments = getEnrollmentsByStudent(studentId);
+        for (Enroll enroll : studentEnrollments) {
+            Payment payment = enroll.getPayment();
+            // Check if payment is unpaid (status is false)
+            if (payment != null && !payment.getStatus() == true && enroll.getStatus() == enrollStatus.Active) {
+                dueEnrollments.add(enroll);
+            }
+        }
+        return dueEnrollments;
+
+    }
+
+    public static List<Enroll> getFinishedPayment(String studentId) {
+        List<Enroll> dueEnrollments = new ArrayList<>();
+        // Get all enrollments for the student
+        List<Enroll> studentEnrollments = getEnrollmentsByStudent(studentId);
+        for (Enroll enroll : studentEnrollments) {
+            Payment payment = enroll.getPayment();
+            // Check if payment is unpaid (status is false)
+            if (payment != null && enroll.getStatus() != enrollStatus.PendingPayment) {
+                dueEnrollments.add(enroll);
+            }
+        }
+        return dueEnrollments;
+    }
 }

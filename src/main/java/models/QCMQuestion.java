@@ -1,30 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 import helpers.IdGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
 public class QCMQuestion implements Question {
 
     private String id;
     private String questionText;
-    private List<String> choices = new ArrayList<>();
+    private List<String> choices;
+    private List<String> correctAnswers;
+    private double grade;
 
-    public QCMQuestion() {
-        id = IdGenerator.generateId();
-    }
-
-    public QCMQuestion(String questionText) {
-        this();
+    public QCMQuestion(String questionText, List<String> choices, List<String> correctAnswers, double grade) {
+        this.id = IdGenerator.generateId();
         this.questionText = questionText;
+        this.choices = new ArrayList<>(choices);
+        this.correctAnswers = new ArrayList<>(correctAnswers);
+        this.grade = grade;
     }
 
     @Override
@@ -32,15 +25,25 @@ public class QCMQuestion implements Question {
         return questionText;
     }
 
+    @Override
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
     }
 
-    public void addChoice(String choice) {
-        this.choices.add(choice);
+    public List<String> getChoices() {
+        return choices;
     }
 
-    public List<String> getChoices() {
-        return this.choices;
+    public List<String> getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public boolean evaluate(Object studentResponse) {
+        List<String> selectedAnswers = (List<String>) studentResponse;
+        return selectedAnswers.containsAll(correctAnswers) && correctAnswers.containsAll(selectedAnswers);
     }
 }

@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 import helpers.IdGenerator;
 
-/**
- *
- * @author User
- */
 public class TrueOrFalseResponse implements Response {
 
     private String id;
@@ -23,6 +15,10 @@ public class TrueOrFalseResponse implements Response {
     @Override
     public boolean evaluate(Object correctAnswer) {
         return selectedValue == (boolean) correctAnswer;
+    }
+
+    public boolean getSelectedValue() {
+        return selectedValue;
     }
 
     public String getId() {

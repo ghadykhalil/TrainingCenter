@@ -1,11 +1,1 @@
-[{
-        "id": "82669fd4-68ec-438b-af76-9a300df680fc",
-        "username": "caroline",
-        "name": "Caroline",
-        "onlineStatus": false
-    }, {
-        "id": "ae5e1da5-8d71-460a-91c8-2205bf9dd5e1",
-        "username": "alex",
-        "name": "Alex",
-        "onlineStatus": false
-    }]
+[{"id":"82669fd4-68ec-438b-af76-9a300df680fc","username":"caroline","name":"Caroline","onlineStatus":false},{"id":"ae5e1da5-8d71-460a-91c8-2205bf9dd5e1","username":"alex","name":"Alex","onlineStatus":false},{"id":"a9cadcb3-4f16-4d8b-a3fa-069ef7539cd9","username":"tracy","name":"Tracy","onlineStatus":false}]

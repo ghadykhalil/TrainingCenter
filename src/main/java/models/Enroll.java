@@ -4,6 +4,7 @@
  */
 package models;
 
+import controllers.PaymentController;
 import enums.enrollStatus;
 import helpers.IdGenerator;
 import java.util.Date;
@@ -12,7 +13,6 @@ import java.util.Date;
  *
  * @author User
  */
-
 public class Enroll {
 
     private String id;
@@ -31,6 +31,7 @@ public class Enroll {
         this.student = student;
         this.subject = subject;
         this.payment = new Payment(subject.getSubjectPrice());
+        PaymentController.addPayment(payment);
     }
 
     public enrollStatus getStatus() {
@@ -65,7 +66,20 @@ public class Enroll {
         this.payment = payment;
     }
 
-    public String getId() {
-        return this.id;
+    @Override
+    public String toString() {
+        return "Subject: " + (subject != null ? subject.getName(): "No Subject")
+                + " | Amount: " + (payment != null ? payment.getAmount() : 0.0);
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    
+    
 }

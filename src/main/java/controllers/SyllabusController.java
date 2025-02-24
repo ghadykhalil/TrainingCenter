@@ -8,12 +8,12 @@ package controllers;
  *
  * @author User
  */
-
 import dbWrapper.JsonUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import models.Subject;
 import models.Syllabus;
 
 public class SyllabusController {
@@ -99,4 +99,15 @@ public class SyllabusController {
         }
         System.out.println("Syllabus not found: " + updatedSyllabus.getId());
     }
+
+    public static Syllabus getSyllabusForSubject(Subject subject) {
+        List<Syllabus> allSyllabi = getSyllabi();
+        for (Syllabus syllabus : allSyllabi) {
+            if (syllabus.getId().equals(subject.getSyllabus().getId())) {
+                return syllabus;
+            }
+        }
+        return null;
+    }
+
 }

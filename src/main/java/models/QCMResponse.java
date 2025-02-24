@@ -1,26 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-/**
- *
- * @author User
- */
+import java.util.List;
+
 public class QCMResponse implements Response {
 
-    private int id;
-    private static int next = 0;
-    private String selectedOption;
+    private List<String> selectedAnswers;
 
-    public QCMResponse(String selectedOption) {
-        this.id = ++next;
-        this.selectedOption = selectedOption;
+    public QCMResponse(List<String> selectedAnswers) {
+        this.selectedAnswers = selectedAnswers;
     }
 
     @Override
     public boolean evaluate(Object correctAnswer) {
-        return selectedOption.equals(correctAnswer);
+        if (!(correctAnswer instanceof List)) {
+            throw new IllegalArgumentException("Correct answer must be a list.");
+        }
+        List<String> correctAnswers = (List<String>) correctAnswer;
+        return selectedAnswers.containsAll(correctAnswers) && correctAnswers.containsAll(selectedAnswers);
+    }
+
+    public List<String> getSelectedAnswers() {
+        return selectedAnswers;
     }
 }

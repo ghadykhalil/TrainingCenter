@@ -1,21 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-/**
- *
- * @author User
- */
+import java.util.List;
+
 public class QCMFactory implements QuestionFactory {
 
     @Override
-    public void createQuestion() {
+    public QCMQuestion createQuestion(String questionText, double grade) {
+        return new QCMQuestion(questionText, List.of(), List.of(), grade); // Empty choices, can be added later
     }
 
     @Override
-    public void createSolution() {
+    public QCMResponse createSolution(Object selectedAnswers) {
+        return new QCMResponse((List<String>) selectedAnswers);
     }
-    
 }

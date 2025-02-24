@@ -11,4 +11,6 @@ package models;
 public interface Question {
 
     String getQuestionText();
+
+    public void setQuestionText(String questionText);
 }

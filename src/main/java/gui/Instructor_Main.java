@@ -6,10 +6,20 @@ package gui;
 
 import controllers.ChapterController;
 import controllers.DocumentController;
+import controllers.EnrollController;
 import controllers.InstructorController;
+import controllers.MeetingController;
+import controllers.StudentController;
 import controllers.SubjectController;
 import controllers.SyllabusController;
+import controllers.TestController;
+import controllers.TrueOrFalseQuestionController;
+import enums.enrollStatus;
+import helpers.DateTimePicker;
 import helpers.FileUploader;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,24 +30,37 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import static java.lang.Integer.parseInt;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.text.NumberFormatter;
 import models.Instructor;
 import models.Subject;
 import models.Syllabus;
 import models.Chapter;
 import models.Document;
+import models.Enroll;
+import models.InstructorVisitor;
+import models.Meeting;
+import models.StartedState;
+import models.Student;
+import models.Test;
+import models.TrueOrFalseQuestion;
+import models.TrueOrFalseQuestionVisitor;
 
 /**
  *
@@ -49,6 +72,7 @@ public class Instructor_Main extends javax.swing.JFrame {
      * Creates new form Instructor_Main
      */
     public Instructor instructor;
+    private DateTimePicker dateTimePicker;
 
     public Instructor_Main() {
         initComponents();
@@ -99,7 +123,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         descriptionLabel = new javax.swing.JLabel();
         subjectLvlFormattedTxt = new javax.swing.JFormattedTextField();
         jLabel18 = new javax.swing.JLabel();
-        jScrollPane8 = new javax.swing.JScrollPane();
+        subjectPriceInput = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jPanel2 = new javax.swing.JPanel();
         addNewSubjectLabel1 = new javax.swing.JLabel();
@@ -135,10 +159,12 @@ public class Instructor_Main extends javax.swing.JFrame {
         jList3 = new javax.swing.JList<>();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jList4 = new javax.swing.JList<>();
+        meetingsList = new javax.swing.JList<>();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jList5 = new javax.swing.JList<>();
+        jLabel19 = new javax.swing.JLabel();
+        selectedSubjectPrice = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -156,7 +182,49 @@ public class Instructor_Main extends javax.swing.JFrame {
         meetingEnrolledStudentsList = new javax.swing.JList<>();
         startMeetingBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        testSelectedSubject = new javax.swing.JComboBox<>();
+        jLabel22 = new javax.swing.JLabel();
+        chapterSelectedSubject = new javax.swing.JComboBox<>();
+        jLabel25 = new javax.swing.JLabel();
+        trueOrFalseResponseTxt = new javax.swing.JComboBox<>();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        availableTestsList = new javax.swing.JList<>();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        testTitleTxt = new javax.swing.JTextPane();
+        jLabel28 = new javax.swing.JLabel();
+        addTest = new javax.swing.JButton();
+        gradeTxt = new javax.swing.JTextField();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        trueOrFalseQuestionList = new javax.swing.JList<>();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        jList6 = new javax.swing.JList<>();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        addTrueOrFalseQuestion = new javax.swing.JButton();
+        jLabel31 = new javax.swing.JLabel();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        trueOrFalseQuestionTxt = new javax.swing.JTextPane();
+        jLabel32 = new javax.swing.JLabel();
+        trueOrFalseQuestionNoteTxt = new javax.swing.JTextField();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        QCMQuestionTxt = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        optionTxt = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        optionsList = new javax.swing.JPanel();
         welcomeLabel = new javax.swing.JLabel();
         dynamicUsername = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
@@ -176,6 +244,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         subjectsLable.setText("All Subjects ");
 
         allSubjectsList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        allSubjectsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         allsubjectsMainContainer.setViewportView(allSubjectsList);
 
         addNewSubject.setText("Add");
@@ -209,7 +278,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         });
 
         prerequisitesLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        prerequisitesLabel.setText("Prerequisites ");
+        prerequisitesLabel.setText("Choose Prerequisites ");
 
         prerequisitesList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         allPrerequisitesMainContainer.setViewportView(prerequisitesList);
@@ -230,7 +299,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         jLabel18.setText("Price ($)");
 
         jTextPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jScrollPane8.setViewportView(jTextPane1);
+        subjectPriceInput.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout subjectPanelLayout = new javax.swing.GroupLayout(subjectPanel);
         subjectPanel.setLayout(subjectPanelLayout);
@@ -257,15 +326,15 @@ public class Instructor_Main extends javax.swing.JFrame {
                                     .addGroup(subjectPanelLayout.createSequentialGroup()
                                         .addComponent(subjectLvlFormattedTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(155, 155, 155)))
-                                .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18)
-                                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(79, 79, 79)))
+                                .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(subjectPriceInput, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGap(81, 81, 81)))
                         .addGap(36, 36, 36)
                         .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(subjectsLable)
                             .addComponent(allsubjectsMainContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(907, Short.MAX_VALUE))
+                .addContainerGap(925, Short.MAX_VALUE))
         );
         subjectPanelLayout.setVerticalGroup(
             subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,10 +356,10 @@ public class Instructor_Main extends javax.swing.JFrame {
                             .addComponent(levelLabel)
                             .addComponent(jLabel18))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(subjectLvlFormattedTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                        .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(subjectPriceInput)
+                            .addComponent(subjectLvlFormattedTxt))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
                         .addComponent(prerequisitesLabel))
                     .addGroup(subjectPanelLayout.createSequentialGroup()
                         .addComponent(subjectsLable)
@@ -350,6 +419,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         addNewSubjectLabel5.setText("All Chapters");
 
         chapterJList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        chapterJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         chapterJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 chapterJListValueChanged(evt);
@@ -408,12 +478,14 @@ public class Instructor_Main extends javax.swing.JFrame {
         jLabel4.setText("Objectives");
 
         objectiveList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        objectiveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(objectiveList);
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel7.setText("Documents");
 
         documentList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        documentList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         documentList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 documentListValueChanged(evt);
@@ -425,19 +497,28 @@ public class Instructor_Main extends javax.swing.JFrame {
         jLabel8.setText("Videos");
 
         jList3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jList3.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane4.setViewportView(jList3);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Meetings");
 
-        jList4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jScrollPane5.setViewportView(jList4);
+        meetingsList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        meetingsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane5.setViewportView(meetingsList);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setText("Tests");
 
         jList5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jList5.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane6.setViewportView(jList5);
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel19.setText("Subject Price");
+
+        selectedSubjectPrice.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        selectedSubjectPrice.setText("PRICE$$");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -447,13 +528,16 @@ public class Instructor_Main extends javax.swing.JFrame {
                 .addGap(72, 72, 72)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addNewSubjectLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addNewSubjectLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(selectedSubjectCbx, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(subjectNameTxt1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                            .addComponent(subjectNameTxt2))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addNewSubjectLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addNewSubjectLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(selectedSubjectCbx, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(subjectNameTxt1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                                .addComponent(subjectNameTxt2))
+                            .addComponent(jLabel19)
+                            .addComponent(selectedSubjectPrice))
                         .addGap(32, 32, 32)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -470,7 +554,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                                     .addComponent(addChapter, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 20, Short.MAX_VALUE))))
+                                .addGap(18, 26, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(addSyllabus, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -503,13 +587,13 @@ public class Instructor_Main extends javax.swing.JFrame {
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(33, 33, 33)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 20, Short.MAX_VALUE)))
+                        .addGap(18, 26, Short.MAX_VALUE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dynamicLearningMaterialName)
                     .addComponent(dynamicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(207, Short.MAX_VALUE))
+                .addContainerGap(213, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -534,7 +618,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                                         .addGap(16, 16, 16)
                                         .addComponent(inputType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(dynamicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 6, Short.MAX_VALUE))))
+                                .addGap(0, 155, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -569,13 +653,19 @@ public class Instructor_Main extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel19))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(selectedSubjectPrice))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -639,7 +729,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         );
         dateMeetingPanelLayout.setVerticalGroup(
             dateMeetingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 39, Short.MAX_VALUE)
+            .addGap(0, 117, Short.MAX_VALUE)
         );
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -662,6 +752,18 @@ public class Instructor_Main extends javax.swing.JFrame {
             }
         });
 
+        jList1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane8.setViewportView(jList1);
+
+        jList2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane9.setViewportView(jList2);
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel23.setText("Recurring Meeting");
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel24.setText("Ended Meeting");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -669,12 +771,19 @@ public class Instructor_Main extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel23))
+                        .addGap(48, 48, 48)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(683, 683, 683)
+                                .addComponent(jLabel24)
+                                .addGap(350, 350, 350)
                                 .addComponent(jLabel11))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(450, 450, 450)
+                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(98, 98, 98)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -700,7 +809,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41)
                         .addComponent(startMeetingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(417, Short.MAX_VALUE))
+                .addContainerGap(437, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -708,28 +817,37 @@ public class Instructor_Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
-                        .addComponent(jLabel11)
-                        .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel17))
-                        .addGap(18, 18, 18)
-                        .addComponent(meetingSelectedSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel23)
+                            .addComponent(jLabel24))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel17))
+                                .addGap(18, 18, 18)
+                                .addComponent(meetingSelectedSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(dateMeetingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(211, 211, 211)
                                 .addComponent(jLabel15)
                                 .addGap(10, 10, 10)
                                 .addComponent(meetingSelectedChapter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel12)
-                                .addGap(18, 18, 18)
-                                .addComponent(topicTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(22, 22, 22)
+                                .addComponent(topicTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(160, 160, 160)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dateMeetingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(26, 26, 26)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -738,20 +856,293 @@ public class Instructor_Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startMeetingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(296, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Schedule Meeting", jPanel1);
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel20.setText("New Test");
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel21.setText("Select Subject *");
+
+        testSelectedSubject.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        testSelectedSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                testSelectedSubjectActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel22.setText("Select Chapter *");
+
+        chapterSelectedSubject.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        chapterSelectedSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chapterSelectedSubjectActionPerformed(evt);
+            }
+        });
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel25.setText("Add True Or False Question");
+
+        trueOrFalseResponseTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        trueOrFalseResponseTxt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "True", "False" }));
+
+        availableTestsList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        availableTestsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        availableTestsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                availableTestsListValueChanged(evt);
+            }
+        });
+        jScrollPane10.setViewportView(availableTestsList);
+
+        jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel26.setText("Available Tests");
+
+        jLabel27.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel27.setText("Test Title *");
+
+        testTitleTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane11.setViewportView(testTitleTxt);
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel28.setText("Grade *");
+
+        addTest.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addTest.setText("Add Test");
+        addTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTestActionPerformed(evt);
+            }
+        });
+
+        gradeTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        gradeTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gradeTxtActionPerformed(evt);
+            }
+        });
+
+        trueOrFalseQuestionList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        trueOrFalseQuestionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jScrollPane12.setViewportView(trueOrFalseQuestionList);
+
+        jList6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jList6.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jList6.setToolTipText("");
+        jScrollPane13.setViewportView(jList6);
+
+        jLabel29.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel29.setText("True Or False Questions");
+
+        jLabel30.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel30.setText("QCM Questions");
+
+        addTrueOrFalseQuestion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addTrueOrFalseQuestion.setText("Add True OR False Question");
+        addTrueOrFalseQuestion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTrueOrFalseQuestionActionPerformed(evt);
+            }
+        });
+
+        jLabel31.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel31.setText("Question Text *");
+
+        trueOrFalseQuestionTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane14.setViewportView(trueOrFalseQuestionTxt);
+
+        jLabel32.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel32.setText("Note");
+
+        trueOrFalseQuestionNoteTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        trueOrFalseQuestionNoteTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                trueOrFalseQuestionNoteTxtActionPerformed(evt);
+            }
+        });
+
+        jLabel33.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel33.setText("Add QCM Question");
+
+        jLabel34.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel34.setText("Question Text *");
+
+        QCMQuestionTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel35.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel35.setText("New Option");
+
+        optionTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton1.setText("Add QCM Question");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("add Option");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        optionsList.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout optionsListLayout = new javax.swing.GroupLayout(optionsList);
+        optionsList.setLayout(optionsListLayout);
+        optionsListLayout.setHorizontalGroup(
+            optionsListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 228, Short.MAX_VALUE)
+        );
+        optionsListLayout.setVerticalGroup(
+            optionsListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 219, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1616, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(testSelectedSubject, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(chapterSelectedSubject, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel27)
+                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel28)
+                    .addComponent(addTest)
+                    .addComponent(gradeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel25)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jScrollPane14, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel31, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jLabel32)
+                            .addComponent(trueOrFalseQuestionNoteTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(trueOrFalseResponseTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addTrueOrFalseQuestion))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel34)
+                            .addComponent(jLabel35)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(optionTxt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                    .addComponent(QCMQuestionTxt, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton3))
+                            .addComponent(optionsList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel29)
+                        .addGap(143, 143, 143)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel30)
+                    .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel20)
+                .addGap(690, 690, 690))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 670, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel20)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(jLabel26)
+                    .addComponent(jLabel29)
+                    .addComponent(jLabel30))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(testSelectedSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel22)
+                                .addGap(18, 18, 18)
+                                .addComponent(chapterSelectedSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel27)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel25)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel31)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel32))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(jLabel28)
+                                .addGap(18, 18, 18)
+                                .addComponent(gradeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(addTest)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(trueOrFalseQuestionNoteTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(trueOrFalseResponseTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addTrueOrFalseQuestion)
+                            .addComponent(jButton1)))
+                    .addComponent(jScrollPane12)
+                    .addComponent(jScrollPane13)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel33)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel34)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(QCMQuestionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel35)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(optionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(123, 123, 123)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(optionsList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Manage Tests", jPanel3);
@@ -997,6 +1388,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Subject subjectChangedId = (Subject) selectedSubjectCbx.getSelectedItem();
         Subject subjectChanged = SubjectController.getSubjectById(subjectChangedId.getId());
+        selectedSubjectPrice.setText((String.valueOf(subjectChanged.getSubjectPrice())) + " $");
         Syllabus currentSyllabus = subjectChanged.getSyllabus();
         DefaultListModel<Chapter> chapterListModel = new DefaultListModel<>();
         if (currentSyllabus != null) {
@@ -1030,6 +1422,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         newSubject.setName(subjectNameTxt.getText());
         newSubject.setDesciption(subjectDescriptionTxt.getText());
         newSubject.setLevel(parseInt(subjectLvlFormattedTxt.getText()));
+        newSubject.setLevel(parseInt(jTextPane1.getText()));
         if (prerequisitesList.getSelectedValuesList() != null) {
             List<Subject> selectedSubjects = prerequisitesList.getSelectedValuesList();
             newSubject.addAllPrerequisites(selectedSubjects);
@@ -1115,6 +1508,7 @@ public class Instructor_Main extends javax.swing.JFrame {
     private void chapterJListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_chapterJListValueChanged
         refreshObjectiveList();
         refreshDocumentList();
+        refreshMeetingsList();
     }//GEN-LAST:event_chapterJListValueChanged
 
     private void documentListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_documentListValueChanged
@@ -1131,12 +1525,49 @@ public class Instructor_Main extends javax.swing.JFrame {
 
     private void startMeetingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startMeetingBtnActionPerformed
         // TODO add your handling code here:
+        try {
+            Subject subjectSelected = (Subject) meetingSelectedSubject.getSelectedItem();
+            Chapter selectedChapter = (Chapter) meetingSelectedChapter.getSelectedItem();
+            String topic = topicTxt.getText();
+            double duration = Double.parseDouble(durationTxt.getText());
 
+            // Fetch enrolled and paid students from EnrollController
+            List<Student> enrolledAndPaidStudents = new ArrayList<>();
+            List<Student> onlineStudents = new ArrayList<>();
+            List<Enroll> enrollments = EnrollController.getEnrollmentsBySubject(subjectSelected.getId());
+            List<Meeting> meetings = MeetingController.getMeetings();
+
+            for (Enroll enroll : enrollments) {
+                Student updatedStudent = StudentController.getStudentById(enroll.getStudent().getId()); // Get the latest student data
+                if (enroll.getStatus() == enrollStatus.Active && enroll.getPayment() != null && enroll.getPayment().getStatus()) {
+                    enrolledAndPaidStudents.add(updatedStudent); // Add all enrolled and paid students
+                    if (updatedStudent.getOnlineStatus()) { // Only add online students as observers
+                        onlineStudents.add(updatedStudent);
+                    }
+                }
+            }
+
+            // If there is valid data for topic and duration, proceed with meeting creation
+            if (topic != null && duration != 0) {
+                Meeting meeting = new Meeting(LocalDateTime.now(), duration, topic, subjectSelected, selectedChapter);
+                meeting.setPendingAttendance(enrolledAndPaidStudents);  // Set all enrolled and paid students as pending attendance
+                meeting.setObservers(onlineStudents);  // Set only online students as observers
+                meeting.startMeeting(instructor);  // Start the meeting and notify students
+
+                // Prepare the visitor for the instructor
+                InstructorVisitor instructorVisitor = new InstructorVisitor(this.instructor, selectedChapter);
+
+                // Change meeting state to Started
+                StartedState state = new StartedState();
+                meeting.setState(state);
+
+                // Accept the visitor for the meeting (can be used to apply logic for the instructor)
+                meeting.accept(instructorVisitor);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid duration. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_startMeetingBtnActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void mainTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_mainTabbedPaneStateChanged
         // TODO add your handling code here:
@@ -1153,6 +1584,16 @@ public class Instructor_Main extends javax.swing.JFrame {
             }
             meetingSelectedSubject.setModel(subjectModelCbx);
         }
+        if (selectedIndex == 3) {
+            DefaultComboBoxModel<Subject> testSubjectModel = new DefaultComboBoxModel<>();
+            List<Subject> instructorSubjects = this.instructor.getSubjects();
+            testSubjectModel.addElement(null);
+            for (Subject subject : instructorSubjects) {
+                Subject actualSubject = SubjectController.getSubjectById(subject.getId());
+                testSubjectModel.addElement(actualSubject);
+            }
+            testSelectedSubject.setModel(testSubjectModel);
+        }
     }//GEN-LAST:event_mainTabbedPaneStateChanged
 
     private void meetingSelectedSubjectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_meetingSelectedSubjectItemStateChanged
@@ -1161,10 +1602,295 @@ public class Instructor_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_meetingSelectedSubjectItemStateChanged
 
     private void meetingSelectedSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meetingSelectedSubjectActionPerformed
-        // TODO add your handling code here:
+        // Get selected subject
         Subject selectedSubject = (Subject) meetingSelectedSubject.getSelectedItem();
-        
+        if (selectedSubject != null) {
+            Syllabus actualSyllabus = SyllabusController.getSyllabusById(selectedSubject.getSyllabus().getId());
+            List<Chapter> allChapters = actualSyllabus.getChapters();
+            DefaultComboBoxModel<Chapter> chaptersModel = new DefaultComboBoxModel<>();
+            chaptersModel.addAll(allChapters);
+            meetingSelectedChapter.setModel(chaptersModel);
+
+            List<Enroll> enrollments = EnrollController.getEnrollmentsBySubject(selectedSubject.getId());
+
+            // Populate waiting list
+            DefaultListModel<Student> waitingListStudentModel = new DefaultListModel<>();
+            for (Enroll enroll : enrollments) {
+                waitingListStudentModel.addElement(enroll.getStudent());
+            }
+            meetingEnrolledStudentsList.setModel(waitingListStudentModel);
+
+            // 🔴 REMOVE OLD COMPONENTS
+            dateMeetingPanel.removeAll();
+
+            // ✅ SET LAYOUT (If not set)
+            dateMeetingPanel.setLayout(new BorderLayout());
+
+            // 🟢 ADD THE DATETIME PICKER
+            DateTimePicker dateTimePicker = new DateTimePicker();
+            dateMeetingPanel.add(dateTimePicker, BorderLayout.CENTER);
+
+            // 🔄 REFRESH PANEL
+            dateMeetingPanel.revalidate();
+            dateMeetingPanel.repaint();
+        }
     }//GEN-LAST:event_meetingSelectedSubjectActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void testSelectedSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testSelectedSubjectActionPerformed
+        // TODO add your handling code here:
+        Subject selectedSubject = (Subject) testSelectedSubject.getSelectedItem();
+        if (selectedSubject != null) {
+            // Retrieve the syllabus of the selected subject
+            Syllabus actualSyllabus = SyllabusController.getSyllabusById(selectedSubject.getSyllabus().getId());
+            List<Chapter> allChapters = actualSyllabus.getChapters();
+
+            // Populate the chapter combo box
+            DefaultComboBoxModel<Chapter> chaptersModel = new DefaultComboBoxModel<>();
+            chaptersModel.addElement(null); // Add a null option for better UX
+            chaptersModel.addAll(allChapters);
+            chapterSelectedSubject.setModel(chaptersModel);
+        }
+    }//GEN-LAST:event_testSelectedSubjectActionPerformed
+
+    private void addTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTestActionPerformed
+        // TODO add your handling code here:
+        // Step 1: Get the selected chapter from the combo box
+        Chapter selectedChapter = (Chapter) chapterSelectedSubject.getSelectedItem(); // Assuming you're using a Chapter combo box
+        Chapter actualChapter = ChapterController.getChapterById(selectedChapter.getId());
+        // Step 2: Get the test title and grade from the text fields
+        String testTitle = testTitleTxt.getText();
+        double grade;
+
+        // Validate if the grade is a valid number
+        try {
+            grade = Double.parseDouble(gradeTxt.getText());
+            System.out.println(grade);
+
+        } catch (NumberFormatException e) {
+            // The error message will be handled by the controller (no JOptionPane)
+            return; // Exit the method if the grade is invalid
+        }
+        // Step 3: Create a new Test object
+        Test newTest = new Test(testTitle, grade);
+
+        // Step 4: Add the test to the selected chapter
+        actualChapter.addTest(newTest);
+
+        ChapterController.updateChapter(actualChapter);
+        TestController.addTest(newTest);
+
+        refreshTestList();
+    }//GEN-LAST:event_addTestActionPerformed
+
+    private void chapterSelectedSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chapterSelectedSubjectActionPerformed
+        // TODO add your handling code here:
+        List<Test> tests = TestController.getTests();
+
+        // Create a list of test titles or any other relevant information you want to display
+        DefaultListModel<Test> listModel = new DefaultListModel<>();
+        for (Test test : tests) {
+            listModel.addElement(test); // Or any other field you want to display
+        }
+
+        // Set the model to the JList to update the display
+        refreshTestList();
+    }//GEN-LAST:event_chapterSelectedSubjectActionPerformed
+
+    private void gradeTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradeTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_gradeTxtActionPerformed
+
+    private void availableTestsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_availableTestsListValueChanged
+        // TODO add your handling code here:
+        Test selectedTest = availableTestsList.getSelectedValue();
+        if (selectedTest == null) {
+            return;
+        }
+
+        Test actualTest = TestController.getTestById(selectedTest.getId());
+        DefaultListModel<TrueOrFalseQuestion> trueOrFalseQuestionsModel = new DefaultListModel<>();
+        List<TrueOrFalseQuestion> trueOrFalseQuestions = actualTest.getTrueOrFalseQuestions();
+        List<TrueOrFalseQuestion> actualTrueOrFalseQuestions = TrueOrFalseQuestionController.getQuestionsByArray(trueOrFalseQuestions);
+        TrueOrFalseQuestionVisitor instructorVisitor = new InstructorVisitor();
+
+// Apply the visitor before adding to the list model
+        for (TrueOrFalseQuestion question : actualTrueOrFalseQuestions) {
+            question.setVisitor(instructorVisitor);  // Ensure the visitor is set
+        }
+
+        trueOrFalseQuestionsModel.addAll(actualTrueOrFalseQuestions);
+        trueOrFalseQuestionList.setModel(trueOrFalseQuestionsModel);
+
+    }//GEN-LAST:event_availableTestsListValueChanged
+
+    private void refreshTrueOrFalseQuestionList() {
+
+    }
+
+    private void trueOrFalseQuestionNoteTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trueOrFalseQuestionNoteTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_trueOrFalseQuestionNoteTxtActionPerformed
+
+    private void addTrueOrFalseQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTrueOrFalseQuestionActionPerformed
+        // TODO add your handling code here:
+        // Get the selected test
+        Test test = availableTestsList.getSelectedValue();
+        if (test == null) {
+            JOptionPane.showMessageDialog(null, "Please select a test first.", "Selection Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Test actualTest = TestController.getTestById(test.getId());
+// Get question text and trim spaces
+        String questionText = trueOrFalseQuestionTxt.getText().trim();
+        if (questionText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Question text cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+// Parse note safely
+        double note;
+        try {
+            note = Double.parseDouble(trueOrFalseQuestionNoteTxt.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid grade value. Please enter a valid number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+// Get true/false response
+        String trueOrFalse = (String) trueOrFalseResponseTxt.getSelectedItem();
+        if (trueOrFalse == null) {
+            JOptionPane.showMessageDialog(null, "Please select a response (True/False).", "Selection Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+// Convert response to boolean
+        boolean correctAnswer = "true".equalsIgnoreCase(trueOrFalse);
+
+// Create and add the question
+        TrueOrFalseQuestion trueOrFalseQuestion = new TrueOrFalseQuestion(questionText, correctAnswer, note);
+        actualTest.addTrueOrFalseQuestion(trueOrFalseQuestion);
+
+// Update test and save question
+        TestController.updateTest(actualTest);
+        TrueOrFalseQuestionController.addQuestion(trueOrFalseQuestion);
+        refreshTrueOrFalseList();
+    }//GEN-LAST:event_addTrueOrFalseQuestionActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private int answerCount = 0; // To track answer numbers (A., B., C., etc.)
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // Capture the input text from the optionTxt field
+        String answerText = optionTxt.getText().trim();
+
+        // Ensure the input is not empty
+        if (!answerText.isEmpty()) {
+            // Generate the answer label (A., B., C., etc.)
+            String answerLabelText = (char) ('A' + answerCount) + ". " + answerText;
+
+            // Create a panel to hold the label and checkbox in one row
+            JPanel answerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Align to the left
+
+            // Create a label for "A. Answer 1"
+            JLabel answerLabel = new JLabel(answerLabelText);
+            answerLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+            // Create a checkbox
+            JCheckBox answerCheckBox = new JCheckBox();
+
+            // Set a preferred size to prevent the panel from resizing too small
+            answerPanel.setPreferredSize(new Dimension(optionsList.getWidth() - 20, 30));
+
+            // Add label and checkbox to the row panel
+            answerPanel.add(answerLabel);
+            answerPanel.add(answerCheckBox);
+
+            // Set optionsList layout to stack vertically
+            optionsList.setLayout(new BoxLayout(optionsList, BoxLayout.Y_AXIS));
+            optionsList.add(answerPanel);
+
+            // Increment answer count for the next input (A → B → C ...)
+            answerCount++;
+
+            // Refresh the UI
+            optionsList.revalidate();
+            optionsList.repaint();
+
+            // Clear the input field
+            optionTxt.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, "Answer text cannot be empty.");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    public void refreshTrueOrFalseList() {
+        Test test = availableTestsList.getSelectedValue();
+        Test currentTest = TestController.getTestById(test.getId());
+        DefaultListModel<TrueOrFalseQuestion> trueOrFalseModel = new DefaultListModel<>();
+        trueOrFalseModel.addAll(currentTest.getTrueOrFalseQuestions());
+    }
+
+    public void refreshTestList() {
+        // Ensure the selected subject and chapter are not null
+        Subject selectedSubject = (Subject) testSelectedSubject.getSelectedItem();
+        if (selectedSubject == null) {
+            return;
+        }
+
+        Subject subject = SubjectController.getSubjectById(selectedSubject.getId());
+        if (subject == null) {
+            return;
+        }
+
+        Chapter selectedChapter = (Chapter) chapterSelectedSubject.getSelectedItem();
+        if (selectedChapter == null) {
+            return;
+        }
+
+        Chapter chapter = ChapterController.getChapterById(selectedChapter.getId());
+        if (chapter == null) {
+            return;
+        }
+
+        // Use SwingWorker for background task
+        new SwingWorker<List<Test>, Void>() {
+            @Override
+            protected List<Test> doInBackground() throws Exception {
+                // Fetch the tests for the selected chapter in the background
+                return TestController.getTestsByArray(chapter.getTests());
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    // Get the result of the background task (the tests)
+                    List<Test> tests = get();
+
+                    // Create a new DefaultListModel and add the tests to it
+                    DefaultListModel<Test> testModel = new DefaultListModel<>();
+                    if (tests != null && !tests.isEmpty()) {
+                        testModel.addAll(tests); // Add all tests to the model
+                    }
+
+                    // Update the JList's model to reflect the changes
+                    availableTestsList.setModel(testModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute(); // Execute the SwingWorker to start the task
+    }
+
+    public void refreshMeetingsList() {
+
+    }
 
     public void refreshObjectiveList() {
         Chapter chapter = chapterJList.getSelectedValue();
@@ -1239,6 +1965,7 @@ public class Instructor_Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField QCMQuestionTxt;
     private javax.swing.JButton addChapter;
     private javax.swing.JButton addNewSubject;
     private javax.swing.JLabel addNewSubjectLabel;
@@ -1248,10 +1975,14 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel addNewSubjectLabel4;
     private javax.swing.JLabel addNewSubjectLabel5;
     private javax.swing.JButton addSyllabus;
+    private javax.swing.JButton addTest;
+    private javax.swing.JButton addTrueOrFalseQuestion;
     private javax.swing.JScrollPane allPrerequisitesMainContainer;
     private javax.swing.JList<Subject> allSubjectsList;
     private javax.swing.JScrollPane allsubjectsMainContainer;
+    private javax.swing.JList<Test> availableTestsList;
     private javax.swing.JList<Chapter> chapterJList;
+    private javax.swing.JComboBox<Chapter> chapterSelectedSubject;
     private javax.swing.JPanel dateMeetingPanel;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JList<Document> documentList;
@@ -1259,8 +1990,11 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel dynamicLearningMaterialName;
     private javax.swing.JPanel dynamicPanel;
     private javax.swing.JLabel dynamicUsername;
+    private javax.swing.JTextField gradeTxt;
     private javax.swing.JComboBox<String> inputType;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1271,21 +2005,45 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
     private javax.swing.JList<String> jList3;
-    private javax.swing.JList<String> jList4;
     private javax.swing.JList<String> jList5;
+    private javax.swing.JList<String> jList6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1293,18 +2051,23 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JLabel levelLabel;
     private javax.swing.JButton logoutButton;
     private javax.swing.JTabbedPane mainTabbedPane;
-    private javax.swing.JList<String> meetingEnrolledStudentsList;
-    private javax.swing.JComboBox<String> meetingSelectedChapter;
+    private javax.swing.JList<Student> meetingEnrolledStudentsList;
+    private javax.swing.JComboBox<Chapter> meetingSelectedChapter;
     private javax.swing.JComboBox<Subject> meetingSelectedSubject;
+    private javax.swing.JList<String> meetingsList;
     private javax.swing.JTextField newChapterNameTxt;
     private javax.swing.JList<String> objectiveList;
+    private javax.swing.JTextField optionTxt;
+    private javax.swing.JPanel optionsList;
     private javax.swing.JLabel prerequisitesLabel;
     private javax.swing.JList<Subject> prerequisitesList;
     private javax.swing.JComboBox<Subject> selectedSubjectCbx;
+    private javax.swing.JLabel selectedSubjectPrice;
     private javax.swing.JButton startMeetingBtn;
     private javax.swing.JTextField subjectDescriptionTxt;
     javax.swing.JFormattedTextField subjectLvlFormattedTxt;
@@ -1313,10 +2076,17 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JTextField subjectNameTxt1;
     private javax.swing.JTextField subjectNameTxt2;
     private javax.swing.JPanel subjectPanel;
+    private javax.swing.JScrollPane subjectPriceInput;
     private javax.swing.JLabel subjectsLable;
     private javax.swing.JLabel syllabusLabel2;
     private javax.swing.JLabel syllabusOutput;
+    private javax.swing.JComboBox<Subject> testSelectedSubject;
+    private javax.swing.JTextPane testTitleTxt;
     private javax.swing.JTextField topicTxt;
+    private javax.swing.JList<TrueOrFalseQuestion> trueOrFalseQuestionList;
+    private javax.swing.JTextField trueOrFalseQuestionNoteTxt;
+    private javax.swing.JTextPane trueOrFalseQuestionTxt;
+    private javax.swing.JComboBox<String> trueOrFalseResponseTxt;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

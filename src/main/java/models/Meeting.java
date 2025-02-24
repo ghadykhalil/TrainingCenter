@@ -1,37 +1,39 @@
-/*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-import helpers.IdGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import helpers.IdGenerator; // Consider dependency injection for this
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author User
- */
 public class Meeting implements Observable {
 
     private String id;
-    private Date dateTime;
     private double duration;
     private String topic;
-    private transient List<Observer> observers = new ArrayList<>();
     private List<Student> admittedStudents = new ArrayList<>();
+    private LocalDateTime dateTime;
+    private Subject subject;
+    private Chapter chapter;
 
-    public Meeting() {
-        id = IdGenerator.generateId();
+    @JsonIgnore
+    private transient List<Observer> observers = new ArrayList<>();
+    @JsonIgnore
+    private transient List<Student> pendingAttendance = new ArrayList<>();
+    @JsonIgnore
+    private transient MeetingState state = new NotStartedState(); // Initial state
 
+    public Meeting(Subject subject, Chapter chapter) {
+        this(LocalDateTime.now(), 30, "No topic", subject, chapter); // Call the other constructor
     }
 
-    public Meeting(Date dateTime, double duration, String topic) {
-        this();
-        this.dateTime = dateTime;
+    public Meeting(LocalDateTime dateTime, double duration, String topic, Subject subject, Chapter chapter) {
+        this.id = IdGenerator.generateId(); // Or inject IdGenerator
         this.duration = duration;
         this.topic = topic;
+        this.dateTime = dateTime;
+        this.subject = subject;
+        this.chapter = chapter;
     }
 
     public void announce(String message) {
@@ -39,35 +41,23 @@ public class Meeting implements Observable {
         notifyObservers(message);
     }
 
-    public void requestJoin(Student student) {
-        System.out.println("Student " + student.getName() + " has requested to join the meeting on " + topic);
-        admitStudent(student);
-    }
-
     public void admitStudent(Student student) {
         if (!admittedStudents.contains(student)) {
             admittedStudents.add(student);
-            System.out.println("Student " + student.getName() + " has been admitted to the meeting on " + topic);
+
+            // Notify only the observers about the new admission
+            student.studentAdmitted(this, student, chapter);  // Notify all observers
+
         } else {
             System.out.println("Student " + student.getName() + " is already admitted.");
         }
     }
 
-    public void messageStudent(String studentName, String message) {
-        for (Student student : admittedStudents) {
-            if (student.getName().equalsIgnoreCase(studentName)) {
-                student.update("Message from meeting on " + topic + ": " + message);
-                return;
-            }
-        }
-        System.out.println("No student found with the name: " + studentName);
-    }
-
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -91,10 +81,12 @@ public class Meeting implements Observable {
         return this.id;
     }
 
+    @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
@@ -106,4 +98,93 @@ public class Meeting implements Observable {
         }
     }
 
+    public List<Student> getAdmittedStudents() {
+        return admittedStudents;
+    }
+
+    public void setAdmittedStudents(List<Student> admittedStudents) {
+        this.admittedStudents = admittedStudents;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Student> students) {
+        this.observers.clear();  // Clear previous observers (if needed)
+        this.observers.addAll(students);  // Add new observers
+    }
+
+    public List<Student> getPendingAttendance() {
+        return pendingAttendance;
+    }
+
+    public void setPendingAttendance(List<Student> pendingAttendance) {
+        this.pendingAttendance = pendingAttendance;
+    }
+
+    public void accept(MeetingVisitor visitor) {
+        visitor.visit(this); // The Meeting "accepts" the visitor and calls its visit() method
+    }
+
+    public MeetingState getState() {
+        return state;
+    }
+
+    public void setState(MeetingState state) {
+        this.state = state;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void startMeeting(Instructor instructor) {
+        this.state = new StartedState();  // Update MeetingState
+        state.startMeeting(this, instructor);
+    }
+
+    public void endMeeting() {
+        this.state = new EndedState(); // Update MeetingState
+        for (Observer observer : observers) {
+            observer.meetingEnded(this);
+        }
+    }
+
+    public void updateMeetingDetails(LocalDateTime newDateTime, double newDuration, String newTopic) {
+        this.dateTime = newDateTime;
+        this.duration = newDuration;
+        this.topic = newTopic;
+        for (Observer observer : observers) {
+            observer.meetingUpdated(this); // Notify about the update
+        }
+    }
+
+    public void rejectStudent(Student student) {
+        if (admittedStudents.contains(student)) {
+            admittedStudents.remove(student);
+        }
+        for (Observer observer : observers) {
+            observer.studentRejected(this, student); // Use specific method
+        }
+    }
+
+    public Chapter getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(Chapter chapter) {
+        this.chapter = chapter;
+    }
+
+    @Override
+    public String toString() {
+        return "Meeting{" + "id=" + id + ", duration=" + duration + ", topic=" + topic + ", admittedStudents=" + admittedStudents + ", dateTime=" + dateTime + ", subject=" + subject + ", chapter=" + chapter + ", observers=" + observers + ", pendingAttendance=" + pendingAttendance + ", state=" + state + '}';
+    }
+
+    
 }

@@ -4,7 +4,12 @@
  */
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gui.Meeting_Screen;
+import gui.Student_Main;
+import helpers.CustomMessageDialog;
 import helpers.IdGenerator;
+
 /**
  *
  * @author User
@@ -15,6 +20,11 @@ public class Student implements User, Observer {
     private String username;
     private String name;
     private boolean onlineStatus;
+
+    @JsonIgnore
+    private transient Student_Main studentMainScreen;
+    @JsonIgnore
+    private transient Meeting_Screen meetingGUI;
 
     public Student() {
         id = IdGenerator.generateId();
@@ -72,4 +82,60 @@ public class Student implements User, Observer {
     public void update(String message) {
         System.out.println("Student " + name + " received update: " + message);
     }
+
+    @Override
+    public void meetingStarted(Meeting meeting, Instructor instructor) {
+        if (!onlineStatus) {
+            return; // Do not notify offline students
+        }
+
+        String subjectName = meeting.getSubject().getName();
+        String chapterName = meeting.getChapter().toString();
+        double duration = meeting.getDuration();
+
+        // Create the dialog and show it
+        CustomMessageDialog messageDialog = new CustomMessageDialog(studentMainScreen, this, instructor, subjectName, chapterName, duration, meeting);
+        messageDialog.showMessage();
+    }
+
+    @Override
+    public void meetingEnded(Meeting meeting
+    ) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void meetingUpdated(Meeting meeting
+    ) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void studentAdmitted(Meeting meeting, Student student, Chapter chapter) {
+        StudentVisitor studentVisitor = new StudentVisitor(student, chapter);
+        studentVisitor.visit(meeting);
+    }
+
+    @Override
+    public void studentRejected(Meeting meeting, Student student
+    ) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Student_Main getStudentMainScreen() {
+        return studentMainScreen;
+    }
+
+    public void setStudentMainScreen(Student_Main studentMainScreen) {
+        this.studentMainScreen = studentMainScreen;
+    }
+
+    public Meeting_Screen getMeetingGUI() {
+        return meetingGUI;
+    }
+
+    public void setMeetingGUI(Meeting_Screen meetingGUI) {
+        this.meetingGUI = meetingGUI;
+    }
+
 }

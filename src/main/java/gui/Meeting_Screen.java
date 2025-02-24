@@ -4,6 +4,11 @@
  */
 package gui;
 
+import java.util.List;
+import models.Meeting;
+import models.Student;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author User
@@ -13,8 +18,33 @@ public class Meeting_Screen extends javax.swing.JFrame {
     /**
      * Creates new form Meeting_Screen
      */
-    public Meeting_Screen() {
+    Meeting meeting;
+
+    public void updateMeetingView(Student admittedStudent) {
+        DefaultListModel<Student> admittedModel = new DefaultListModel<>();
+        DefaultListModel<Student> awaitingModel = (DefaultListModel<Student>) awaitingStudentsList.getModel();
+
+        // Add admitted students to the model
+        for (Student student : meeting.getAdmittedStudents()) {
+            admittedModel.addElement(student);
+            awaitingModel.removeElement(student);
+        }
+
+
+        // Set the models to the JLists
+        admittedStudentsList.setModel(admittedModel);
+        awaitingStudentsList.setModel(awaitingModel);
+
+        // Refresh the JLists to reflect the changes
+        admittedStudentsList.revalidate();
+        admittedStudentsList.repaint();
+        awaitingStudentsList.revalidate();
+        awaitingStudentsList.repaint();
+    }
+
+    public Meeting_Screen(Meeting meeting) {
         initComponents();
+        this.meeting = meeting;
     }
 
     /**
@@ -26,57 +56,175 @@ public class Meeting_Screen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Meeting = new javax.swing.JLabel();
+        roleLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        chapterLabel = new javax.swing.JLabel();
+        subjectLabel = new javax.swing.JLabel();
+        topicLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        objectives = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        awaitingStudentsList = new javax.swing.JList<>();
+        awaitingStudentsLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        admittedStudentsList = new javax.swing.JList<>();
+        button1 = new javax.swing.JButton();
+        button2 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Meeting.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        Meeting.setText("Meeting");
+
+        roleLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        roleLabel.setText("roleLabel");
+
+        nameLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        nameLabel.setText("nameLabel");
+
+        chapterLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        chapterLabel.setText("chapterLabel");
+
+        subjectLabel.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        subjectLabel.setText("subjectLabel");
+
+        topicLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        topicLabel.setText("topicLabel");
+
+        objectives.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane1.setViewportView(objectives);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Objectives:");
+
+        awaitingStudentsList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane2.setViewportView(awaitingStudentsList);
+
+        awaitingStudentsLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        awaitingStudentsLabel.setText("Awaiting Students List");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Admitted Students List");
+
+        admittedStudentsList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane3.setViewportView(admittedStudentsList);
+
+        button1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        button1.setText("button1");
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+
+        button2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        button2.setText("button2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1102, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(topicLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(roleLabel)
+                                    .addComponent(nameLabel))
+                                .addGap(333, 333, 333)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Meeting)
+                                    .addComponent(chapterLabel)
+                                    .addComponent(subjectLabel)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(300, 300, 300)
+                        .addComponent(button1)
+                        .addGap(136, 136, 136)
+                        .addComponent(button2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(awaitingStudentsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane3))
+                        .addContainerGap(45, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 603, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Meeting)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(roleLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nameLabel))
+                    .addComponent(subjectLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chapterLabel)
+                    .addComponent(awaitingStudentsLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(topicLabel)
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Meeting_Screen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Meeting_Screen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Meeting_Screen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Meeting_Screen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Meeting_Screen().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Meeting;
+    public javax.swing.JList<Student> admittedStudentsList;
+    public javax.swing.JLabel awaitingStudentsLabel;
+    public javax.swing.JList<Student> awaitingStudentsList;
+    public javax.swing.JButton button1;
+    public javax.swing.JButton button2;
+    public javax.swing.JLabel chapterLabel;
+    private javax.swing.JLabel jLabel1;
+    public javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    public javax.swing.JLabel nameLabel;
+    public javax.swing.JList<String> objectives;
+    public javax.swing.JLabel roleLabel;
+    public javax.swing.JLabel subjectLabel;
+    public javax.swing.JLabel topicLabel;
     // End of variables declaration//GEN-END:variables
 }

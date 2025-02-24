@@ -8,12 +8,28 @@ package models;
  *
  * @author User
  */
-public class InstructorVisitor implements MeetingVisitor {
+public class InstructorVisitor implements MeetingVisitor, TrueOrFalseQuestionVisitor {
 
-    private Instructor instructor; 
-    
+    private Instructor instructor;
+    private Chapter chapter;
+
+    public InstructorVisitor() {
+    }
+
+    public InstructorVisitor(Instructor instructor, Chapter chapter) {
+        this.instructor = instructor;
+        this.chapter = chapter;
+    }
+
     @Override
     public void visit(Meeting meeting) {
+        MeetingScreenBuilder builder = new InstructorScreenBuilder(meeting, this.instructor, this.chapter);
+        builder.buildScreen();
+    }
+
+    @Override
+    public String visitTrueOrFalseQuestion(TrueOrFalseQuestion trueOrFalseQuestion) {
+        return trueOrFalseQuestion.getQuestionText() + "\n Answer: " + (trueOrFalseQuestion.getCorrectAnswer() ? "True" : "False")+" "+ trueOrFalseQuestion.getGrade();
     }
 
 }

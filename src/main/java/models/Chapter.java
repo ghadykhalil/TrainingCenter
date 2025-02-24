@@ -100,4 +100,10 @@ public class Chapter {
     public void addDocument(Document document) {
         this.documents.add(document);
     }
+
+    public void addTest(Test test) {
+        if (test != null) {
+            this.tests.add(test);
+        }
+    }
 }
