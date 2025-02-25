@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import helpers.IdGenerator; // Consider dependency injection for this
 import java.time.LocalDateTime;
@@ -12,10 +13,13 @@ public class Meeting implements Observable {
     private double duration;
     private String topic;
     private List<Student> admittedStudents = new ArrayList<>();
-    private LocalDateTime dateTime;
-    private Subject subject;
-    private Chapter chapter;
+    private String dateTime;
+    private boolean ended;
 
+    @JsonIgnore
+    private Subject subject;
+    @JsonIgnore
+    private Chapter chapter;
     @JsonIgnore
     private transient List<Observer> observers = new ArrayList<>();
     @JsonIgnore
@@ -23,17 +27,20 @@ public class Meeting implements Observable {
     @JsonIgnore
     private transient MeetingState state = new NotStartedState(); // Initial state
 
+    public Meeting(){}
+    
     public Meeting(Subject subject, Chapter chapter) {
-        this(LocalDateTime.now(), 30, "No topic", subject, chapter); // Call the other constructor
+        this(LocalDateTime.now().toString(), 30, "No topic", subject, chapter); // Call the other constructor
     }
 
-    public Meeting(LocalDateTime dateTime, double duration, String topic, Subject subject, Chapter chapter) {
+    public Meeting(String dateTime, double duration, String topic, Subject subject, Chapter chapter) {
         this.id = IdGenerator.generateId(); // Or inject IdGenerator
         this.duration = duration;
         this.topic = topic;
         this.dateTime = dateTime;
         this.subject = subject;
         this.chapter = chapter;
+        setEnded(false);
     }
 
     public void announce(String message) {
@@ -53,11 +60,11 @@ public class Meeting implements Observable {
         }
     }
 
-    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -93,9 +100,7 @@ public class Meeting implements Observable {
 
     @Override
     public void notifyObservers(String message) {
-        for (Observer observer : observers) {
-            observer.update(message);
-        }
+
     }
 
     public List<Student> getAdmittedStudents() {
@@ -148,14 +153,14 @@ public class Meeting implements Observable {
         state.startMeeting(this, instructor);
     }
 
-    public void endMeeting() {
+    public void endMeeting(String instructorName) {
         this.state = new EndedState(); // Update MeetingState
         for (Observer observer : observers) {
-            observer.meetingEnded(this);
+            observer.meetingEnded(this, instructorName);
         }
     }
 
-    public void updateMeetingDetails(LocalDateTime newDateTime, double newDuration, String newTopic) {
+    public void updateMeetingDetails(String newDateTime, double newDuration, String newTopic) {
         this.dateTime = newDateTime;
         this.duration = newDuration;
         this.topic = newTopic;
@@ -183,8 +188,18 @@ public class Meeting implements Observable {
 
     @Override
     public String toString() {
-        return "Meeting{" + "id=" + id + ", duration=" + duration + ", topic=" + topic + ", admittedStudents=" + admittedStudents + ", dateTime=" + dateTime + ", subject=" + subject + ", chapter=" + chapter + ", observers=" + observers + ", pendingAttendance=" + pendingAttendance + ", state=" + state + '}';
+        return String.format(
+                "ID: %s | Topic: %s | Duration: %.1f mins | Date: %s | Ended: %s | Students: %d",
+                id, topic, duration, dateTime, ended ? "Yes" : "No", admittedStudents.size()
+        );
     }
 
-    
+    public boolean isEnded() {
+        return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+
 }

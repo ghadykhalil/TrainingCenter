@@ -9,6 +9,7 @@ import gui.Meeting_Screen;
 import gui.Student_Main;
 import helpers.CustomMessageDialog;
 import helpers.IdGenerator;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -79,8 +80,7 @@ public class Student implements User, Observer {
     }
 
     @Override
-    public void update(String message) {
-        System.out.println("Student " + name + " received update: " + message);
+    public void update(Student newStudentState) {
     }
 
     @Override
@@ -99,9 +99,19 @@ public class Student implements User, Observer {
     }
 
     @Override
-    public void meetingEnded(Meeting meeting
-    ) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void meetingEnded(Meeting meeting, String instructorName) {
+        if (this.meetingGUI != null) {
+            String message = "The meeting \"" + meeting.getTopic() + "\" has been ended. by "
+                    + "Instructor: " + instructorName + "\n"
+                    + "Subject: " + meeting.getSubject().toString() + "\n"
+                    + "Chapter: " + meeting.getChapter().getChapterTitle() + "\n"
+                    + "Thank you for attending!";
+
+            JOptionPane.showMessageDialog(null, message, this.getName() + " - Meeting Summary", JOptionPane.INFORMATION_MESSAGE);
+
+            this.meetingGUI.dispose();  // Close the GUI screen
+            setMeetingGUI(null);  // Optionally set it to null to prevent further references
+        }
     }
 
     @Override

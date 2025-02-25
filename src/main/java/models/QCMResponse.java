@@ -1,12 +1,19 @@
 package models;
 
+import helpers.IdGenerator;
 import java.util.List;
 
 public class QCMResponse implements Response {
 
+    private String id;
     private List<String> selectedAnswers;
 
+    public QCMResponse() {
+        id = IdGenerator.generateId();
+    }
+
     public QCMResponse(List<String> selectedAnswers) {
+        this();
         this.selectedAnswers = selectedAnswers;
     }
 
@@ -22,4 +29,14 @@ public class QCMResponse implements Response {
     public List<String> getSelectedAnswers() {
         return selectedAnswers;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 }

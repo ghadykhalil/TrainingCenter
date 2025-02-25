@@ -1,6 +1,1 @@
-[{
-        "id": "e47f961a-c7ce-42ae-b021-9422efccde2b",
-        "questionText": "Is java OOP language",
-        "correctAnswer": true,
-        "grade": 5.0
-    }]
+[{"id":"8e51f805-db10-4aa7-9f33-b63dd9518278","questionText":"Is java OOP","correctAnswer":true,"grade":5.0},{"id":"4ba16def-d003-45d1-a57a-53d6d9c0c063","questionText":"Is java OOP","correctAnswer":true,"grade":5.0},{"id":"4b86f727-3404-445c-9edc-3b73b88abb9f","questionText":"Is it correct to cast double to integer","correctAnswer":false,"grade":5.0}]

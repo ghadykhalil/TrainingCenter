@@ -21,6 +21,7 @@ public class Chapter {
     private List<Document> documents;
     private List<Video> videos;
     private List<Test> tests;
+    private List<Meeting> meetings;
 
     public Chapter() {
         id = IdGenerator.generateId();
@@ -28,6 +29,7 @@ public class Chapter {
         documents = new ArrayList<>();
         videos = new ArrayList<>();
         tests = new ArrayList<>();
+        meetings = new ArrayList<>();
     }
 
     public Chapter(int chapterNo, String chapterTitle) {
@@ -105,5 +107,17 @@ public class Chapter {
         if (test != null) {
             this.tests.add(test);
         }
+    }
+
+    public List<Meeting> getMeetings() {
+        return meetings;
+    }
+
+    public void setMeetings(List<Meeting> meetings) {
+        this.meetings = meetings;
+    }
+
+    public void addMeeting(Meeting meeting) {
+        this.meetings.add(meeting);
     }
 }

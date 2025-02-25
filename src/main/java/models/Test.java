@@ -38,6 +38,14 @@ public class Test {
         return id;
     }
 
+    public void setTrueOrFalseQuestions(List<TrueOrFalseQuestion> trueOrFalseQuestions) {
+        this.trueOrFalseQuestions = trueOrFalseQuestions;
+    }
+
+    public void setStudentAnswers(List<StudentAnswer> studentAnswers) {
+        this.studentAnswers = studentAnswers;
+    }
+
     public List<QCMQuestion> getQcmQuestions() {
         return qcmQuestions;
     }
@@ -53,8 +61,6 @@ public class Test {
     public void setTotalMaxGrade(double totalMaxGrade) {
         this.totalMaxGrade = totalMaxGrade;
     }
-    
-    
 
     public List<TrueOrFalseQuestion> getTrueOrFalseQuestions() {
         return trueOrFalseQuestions;
@@ -62,10 +68,6 @@ public class Test {
 
     public void addTrueOrFalseQuestion(TrueOrFalseQuestion question) {
         this.trueOrFalseQuestions.add(question);
-    }
-
-    public List<QCMQuestion> getQCMQuestions() {
-        return qcmQuestions;
     }
 
     public void addQCMQuestion(QCMQuestion question) {

@@ -85,8 +85,12 @@ public class InstructorScreenBuilder extends MeetingScreenBuilder {
         JButton button2 = this.meeting_Screen.button2;
         button2.setText("End Meeting");
         button2.addActionListener(e -> {
-            //MeetingController.addMeeting(meeting);
-            meeting.endMeeting();
+            meeting.endMeeting(instuctor.getName());
+            this.meeting.setEnded(true);
+            Chapter actualChapter = ChapterController.getChapterById(chapter.getId());
+            actualChapter.addMeeting(meeting);
+            ChapterController.updateChapter(actualChapter);
+            MeetingController.addMeeting(meeting);
             this.meeting_Screen.dispose();
         });
     }

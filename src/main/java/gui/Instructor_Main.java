@@ -9,6 +9,7 @@ import controllers.DocumentController;
 import controllers.EnrollController;
 import controllers.InstructorController;
 import controllers.MeetingController;
+import controllers.QCMQuestionController;
 import controllers.StudentController;
 import controllers.SubjectController;
 import controllers.SyllabusController;
@@ -16,8 +17,10 @@ import controllers.TestController;
 import controllers.TrueOrFalseQuestionController;
 import enums.enrollStatus;
 import helpers.DateTimePicker;
+import helpers.MeetingTableModel;
 import helpers.FileUploader;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -33,6 +36,7 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -46,6 +50,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import javax.swing.text.NumberFormatter;
 import models.Instructor;
@@ -56,6 +61,8 @@ import models.Document;
 import models.Enroll;
 import models.InstructorVisitor;
 import models.Meeting;
+import models.QCMQuestion;
+import models.QCMQuestionVisitor;
 import models.StartedState;
 import models.Student;
 import models.Test;
@@ -157,12 +164,6 @@ public class Instructor_Main extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jList3 = new javax.swing.JList<>();
-        jLabel9 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        meetingsList = new javax.swing.JList<>();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jList5 = new javax.swing.JList<>();
         jLabel19 = new javax.swing.JLabel();
         selectedSubjectPrice = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -181,13 +182,14 @@ public class Instructor_Main extends javax.swing.JFrame {
         jScrollPane7 = new javax.swing.JScrollPane();
         meetingEnrolledStudentsList = new javax.swing.JList<>();
         startMeetingBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jScrollPane9 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        scheduleMeeting = new javax.swing.JButton();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
+        scheduleMeeting1 = new javax.swing.JButton();
+        jScrollPane15 = new javax.swing.JScrollPane();
+        endedMeetingTable = new javax.swing.JTable();
+        jScrollPane16 = new javax.swing.JScrollPane();
+        recurringMeetingTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -208,7 +210,7 @@ public class Instructor_Main extends javax.swing.JFrame {
         jScrollPane12 = new javax.swing.JScrollPane();
         trueOrFalseQuestionList = new javax.swing.JList<>();
         jScrollPane13 = new javax.swing.JScrollPane();
-        jList6 = new javax.swing.JList<>();
+        qcmQuestionList = new javax.swing.JList<>();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         addTrueOrFalseQuestion = new javax.swing.JButton();
@@ -222,9 +224,13 @@ public class Instructor_Main extends javax.swing.JFrame {
         QCMQuestionTxt = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         optionTxt = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        addQCMQuestion = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         optionsList = new javax.swing.JPanel();
+        jLabel36 = new javax.swing.JLabel();
+        QCMQuestionNote = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         welcomeLabel = new javax.swing.JLabel();
         dynamicUsername = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
@@ -334,7 +340,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                         .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(subjectsLable)
                             .addComponent(allsubjectsMainContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(925, Short.MAX_VALUE))
+                .addContainerGap(1131, Short.MAX_VALUE))
         );
         subjectPanelLayout.setVerticalGroup(
             subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -359,7 +365,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                         .addGroup(subjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(subjectPriceInput)
                             .addComponent(subjectLvlFormattedTxt))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
                         .addComponent(prerequisitesLabel))
                     .addGroup(subjectPanelLayout.createSequentialGroup()
                         .addComponent(subjectsLable)
@@ -500,20 +506,6 @@ public class Instructor_Main extends javax.swing.JFrame {
         jList3.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane4.setViewportView(jList3);
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel9.setText("Meetings");
-
-        meetingsList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        meetingsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane5.setViewportView(meetingsList);
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel10.setText("Tests");
-
-        jList5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jList5.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane6.setViewportView(jList5);
-
         jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel19.setText("Subject Price");
 
@@ -551,49 +543,47 @@ public class Instructor_Main extends javax.swing.JFrame {
                                         .addComponent(syllabusOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel3)
                                     .addComponent(newChapterNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(addChapter, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 26, Short.MAX_VALUE))))
+                                    .addComponent(addChapter, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 119, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(addSyllabus, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(addNewSubjectLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(367, 367, 367))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(100, 100, 100)
-                                        .addComponent(jLabel8))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addNewSubjectLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(367, 367, 367))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(inputType, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(88, 88, 88)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel9)
-                                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(inputType, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dynamicLearningMaterialName)
+                            .addComponent(dynamicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(334, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(100, 100, 100)
+                                .addComponent(jLabel8)
+                                .addGap(67, 67, 67))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(33, 33, 33)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 26, Short.MAX_VALUE)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicLearningMaterialName)
-                    .addComponent(dynamicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(213, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -618,7 +608,7 @@ public class Instructor_Main extends javax.swing.JFrame {
                                         .addGap(16, 16, 16)
                                         .addComponent(inputType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(dynamicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 155, Short.MAX_VALUE))))
+                                .addGap(0, 132, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addNewSubjectLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -646,31 +636,24 @@ public class Instructor_Main extends javax.swing.JFrame {
                                 .addComponent(subjectNameTxt2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addSyllabus, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(39, 39, 39)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel19)
+                        .addGap(16, 16, 16)
+                        .addComponent(selectedSubjectPrice))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel19))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addComponent(selectedSubjectPrice))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(27, 27, 27))
         );
 
         mainTabbedPane.addTab("Save Chapters", jPanel2);
@@ -717,6 +700,11 @@ public class Instructor_Main extends javax.swing.JFrame {
         jLabel15.setText("Select Chapter *");
 
         meetingSelectedChapter.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        meetingSelectedChapter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                meetingSelectedChapterActionPerformed(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setText("Date And Time");
@@ -745,24 +733,51 @@ public class Instructor_Main extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Schedule Meeting");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        scheduleMeeting.setText("Schedule Meeting");
+        scheduleMeeting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                scheduleMeetingActionPerformed(evt);
             }
         });
-
-        jList1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jScrollPane8.setViewportView(jList1);
-
-        jList2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jScrollPane9.setViewportView(jList2);
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel23.setText("Recurring Meeting");
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel24.setText("Ended Meeting");
+        jLabel24.setText("Ended Meetings");
+
+        scheduleMeeting1.setText("Start Selected Meeting");
+        scheduleMeeting1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scheduleMeeting1ActionPerformed(evt);
+            }
+        });
+
+        endedMeetingTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane15.setViewportView(endedMeetingTable);
+
+        recurringMeetingTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane16.setViewportView(recurringMeetingTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -772,24 +787,31 @@ public class Instructor_Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
+                        .addComponent(jLabel23)
+                        .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel23))
-                        .addGap(48, 48, 48)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel24)
-                                .addGap(350, 350, 350)
+                                .addGap(512, 512, 512)
                                 .addComponent(jLabel11))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(98, 98, 98)
+                                .addGap(312, 312, 312)
+                                .addComponent(jLabel24))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane16, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scheduleMeeting1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
+                        .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(97, 97, 97)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(topicTxt, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(durationTxt))
+                                        .addComponent(durationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel14)
@@ -799,43 +821,35 @@ public class Instructor_Main extends javax.swing.JFrame {
                                         .addGap(133, 133, 133)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel16)
-                                            .addComponent(dateMeetingPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                        .addGap(44, 44, 44)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane7)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(596, 596, 596)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(startMeetingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(437, Short.MAX_VALUE))
+                                            .addComponent(dateMeetingPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(44, 44, 44)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(102, 102, 102)
+                                .addComponent(scheduleMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41)
+                                .addComponent(startMeetingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(187, 187, 187))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jLabel11)
+                .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel24))
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel14)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jLabel17))
-                                .addGap(18, 18, 18)
-                                .addComponent(meetingSelectedSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dateMeetingPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(211, 211, 211)
+                                .addGap(86, 86, 86)
                                 .addComponent(jLabel15)
                                 .addGap(10, 10, 10)
                                 .addComponent(meetingSelectedChapter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -843,26 +857,40 @@ public class Instructor_Main extends javax.swing.JFrame {
                                 .addComponent(jLabel12)
                                 .addGap(22, 22, 22)
                                 .addComponent(topicTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(160, 160, 160)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dateMeetingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(26, 26, 26)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel17))
+                                .addGap(18, 18, 18)
+                                .addComponent(meetingSelectedSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(durationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(durationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel23))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane16, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(scheduleMeeting1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startMeetingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(296, Short.MAX_VALUE))
+                    .addComponent(scheduleMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(212, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Schedule Meeting", jPanel1);
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel20.setText("New Test");
+        jLabel20.setText("Test Questions");
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel21.setText("Select Subject *");
@@ -930,10 +958,10 @@ public class Instructor_Main extends javax.swing.JFrame {
         trueOrFalseQuestionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jScrollPane12.setViewportView(trueOrFalseQuestionList);
 
-        jList6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jList6.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jList6.setToolTipText("");
-        jScrollPane13.setViewportView(jList6);
+        qcmQuestionList.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        qcmQuestionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        qcmQuestionList.setToolTipText("");
+        jScrollPane13.setViewportView(qcmQuestionList);
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel29.setText("True Or False Questions");
@@ -978,11 +1006,11 @@ public class Instructor_Main extends javax.swing.JFrame {
 
         optionTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setText("Add QCM Question");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        addQCMQuestion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addQCMQuestion.setText("Add QCM Question");
+        addQCMQuestion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addQCMQuestionActionPerformed(evt);
             }
         });
 
@@ -994,17 +1022,35 @@ public class Instructor_Main extends javax.swing.JFrame {
         });
 
         optionsList.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        optionsList.setMinimumSize(new java.awt.Dimension(230, 221));
 
         javax.swing.GroupLayout optionsListLayout = new javax.swing.GroupLayout(optionsList);
         optionsList.setLayout(optionsListLayout);
         optionsListLayout.setHorizontalGroup(
             optionsListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 228, Short.MAX_VALUE)
+            .addGap(0, 377, Short.MAX_VALUE)
         );
         optionsListLayout.setVerticalGroup(
             optionsListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 219, Short.MAX_VALUE)
         );
+
+        jLabel36.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel36.setText("Note");
+
+        QCMQuestionNote.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        QCMQuestionNote.setMaximumSize(new java.awt.Dimension(64, 31));
+        QCMQuestionNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                QCMQuestionNoteActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel9.setText("Selected Test:");
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel10.setText("$$$");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1025,7 +1071,6 @@ public class Instructor_Main extends javax.swing.JFrame {
                     .addComponent(gradeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1039,33 +1084,41 @@ public class Instructor_Main extends javax.swing.JFrame {
                             .addComponent(addTrueOrFalseQuestion))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
+                            .addComponent(addQCMQuestion)
                             .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel34)
                             .addComponent(jLabel35)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(optionTxt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                    .addComponent(QCMQuestionTxt, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3))
-                            .addComponent(optionsList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+                            .addComponent(optionsList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel34)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel36))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(optionTxt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                            .addComponent(QCMQuestionTxt, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(QCMQuestionNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel9)))))
+                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel29)
-                        .addGap(143, 143, 143)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel30)
-                    .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel20)
-                .addGap(690, 690, 690))
+                    .addComponent(jLabel20)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel29))
+                        .addGap(60, 60, 60)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel30)
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(274, 274, 274))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1122,27 +1175,34 @@ public class Instructor_Main extends javax.swing.JFrame {
                                 .addGap(37, 37, 37)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addTrueOrFalseQuestion)
-                            .addComponent(jButton1)))
+                            .addComponent(addQCMQuestion)))
                     .addComponent(jScrollPane12)
                     .addComponent(jScrollPane13)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel33)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel34)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel36)
+                                .addComponent(jLabel9)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel34)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(QCMQuestionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel35)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(optionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(123, 123, 123)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(QCMQuestionNote, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(optionsList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Manage Tests", jPanel3);
@@ -1163,35 +1223,39 @@ public class Instructor_Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainTabbedPane)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dynamicUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(welcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(740, 740, 740)
                 .addComponent(jLabel1)
-                .addGap(446, 446, 446)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1840, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(38, 38, 38))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(logoutButton)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(16, 16, 16)
                                 .addComponent(dynamicUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)))
-                .addComponent(mainTabbedPane))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addGap(27, 27, 27)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 831, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -1549,7 +1613,7 @@ public class Instructor_Main extends javax.swing.JFrame {
 
             // If there is valid data for topic and duration, proceed with meeting creation
             if (topic != null && duration != 0) {
-                Meeting meeting = new Meeting(LocalDateTime.now(), duration, topic, subjectSelected, selectedChapter);
+                Meeting meeting = new Meeting(LocalDateTime.now().toString(), duration, topic, subjectSelected, selectedChapter);
                 meeting.setPendingAttendance(enrolledAndPaidStudents);  // Set all enrolled and paid students as pending attendance
                 meeting.setObservers(onlineStudents);  // Set only online students as observers
                 meeting.startMeeting(instructor);  // Start the meeting and notify students
@@ -1636,9 +1700,64 @@ public class Instructor_Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_meetingSelectedSubjectActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void scheduleMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scheduleMeetingActionPerformed
+        try {
+            Subject subjectSelected = (Subject) meetingSelectedSubject.getSelectedItem();
+            Chapter selectedChapter = (Chapter) meetingSelectedChapter.getSelectedItem();
+            String topic = topicTxt.getText();
+            double duration = Double.parseDouble(durationTxt.getText());
+
+            // Validate inputs
+            if (topic.isEmpty() || duration <= 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid topic and duration.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Retrieve the selected date and time from DateTimePicker
+            Component[] components = dateMeetingPanel.getComponents();
+            LocalDateTime selectedDateTime = null;
+
+            for (Component component : components) {
+                if (component instanceof DateTimePicker) {
+                    selectedDateTime = ((DateTimePicker) component).getSelectedDateTime();
+                    break;
+                }
+            }
+
+            if (selectedDateTime == null) {
+                JOptionPane.showMessageDialog(this, "Please select a valid date and time.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Create and save the meeting
+            Meeting meeting = new Meeting(selectedDateTime.toString(), duration, topic, subjectSelected, selectedChapter);
+            boolean success = MeetingController.addMeeting(meeting);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Meeting scheduled successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Refresh table with the updated meetings list
+                if (selectedChapter != null) {
+                    Chapter actualChapter = ChapterController.getChapterById(selectedChapter.getId());
+                    actualChapter.addMeeting(meeting);
+                    ChapterController.updateChapter(actualChapter);
+                    if (actualChapter != null) {
+                        List<Meeting> filteredMeetings = actualChapter.getMeetings().stream()
+                                .filter(m -> !m.isEnded()) // Use 'm' as the variable name to avoid conflict
+                                .collect(Collectors.toList());
+
+                        // Set the filtered meetings into the table model
+                        MeetingTableModel model = new MeetingTableModel(filteredMeetings);
+                        recurringMeetingTable.setModel(model); // Set the model to update the table
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid duration. Please enter a numeric value.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_scheduleMeetingActionPerformed
+
 
     private void testSelectedSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testSelectedSubjectActionPerformed
         // TODO add your handling code here:
@@ -1710,21 +1829,32 @@ public class Instructor_Main extends javax.swing.JFrame {
         if (selectedTest == null) {
             return;
         }
-
+        jLabel10.setText(selectedTest.getTitle());
         Test actualTest = TestController.getTestById(selectedTest.getId());
         DefaultListModel<TrueOrFalseQuestion> trueOrFalseQuestionsModel = new DefaultListModel<>();
+        DefaultListModel<QCMQuestion> qcmQuestionModel = new DefaultListModel<>();
         List<TrueOrFalseQuestion> trueOrFalseQuestions = actualTest.getTrueOrFalseQuestions();
+        List<QCMQuestion> qcmQuestions = actualTest.getQcmQuestions();
         List<TrueOrFalseQuestion> actualTrueOrFalseQuestions = TrueOrFalseQuestionController.getQuestionsByArray(trueOrFalseQuestions);
         TrueOrFalseQuestionVisitor instructorVisitor = new InstructorVisitor();
+        QCMQuestionVisitor instructorVisitor1 = new InstructorVisitor();
+        // Apply the visitor before adding to the list model
+        if (actualTrueOrFalseQuestions != null) {
+            for (TrueOrFalseQuestion question : actualTrueOrFalseQuestions) {
+                question.setVisitor(instructorVisitor);  // Ensure the visitor is set
+            }
+            trueOrFalseQuestionsModel.addAll(actualTrueOrFalseQuestions);
+            trueOrFalseQuestionList.setModel(trueOrFalseQuestionsModel);
 
-// Apply the visitor before adding to the list model
-        for (TrueOrFalseQuestion question : actualTrueOrFalseQuestions) {
-            question.setVisitor(instructorVisitor);  // Ensure the visitor is set
         }
+        if (qcmQuestions != null) {
+            for (QCMQuestion question : qcmQuestions) {
+                question.setVisitor(instructorVisitor1);
+            }
 
-        trueOrFalseQuestionsModel.addAll(actualTrueOrFalseQuestions);
-        trueOrFalseQuestionList.setModel(trueOrFalseQuestionsModel);
-
+            qcmQuestionModel.addAll(qcmQuestions);
+            qcmQuestionList.setModel(qcmQuestionModel);
+        }
     }//GEN-LAST:event_availableTestsListValueChanged
 
     private void refreshTrueOrFalseQuestionList() {
@@ -1780,10 +1910,112 @@ public class Instructor_Main extends javax.swing.JFrame {
         refreshTrueOrFalseList();
     }//GEN-LAST:event_addTrueOrFalseQuestionActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void addQCMQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addQCMQuestionActionPerformed
+        // Get the question text from the input field
+        Test test = availableTestsList.getSelectedValue();
+        if (test == null) {
+            JOptionPane.showMessageDialog(this, "You must select a test.");
+            return;
+        }
+        Test actualTest = TestController.getTestById(test.getId());
 
+        double note;
+        String questionText = QCMQuestionTxt.getText().trim();
+        System.out.println("Question: " + questionText);
+
+        // Ensure the question is not empty
+        if (questionText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Question text cannot be empty.");
+            return;
+        }
+
+        try {
+            note = Double.parseDouble(QCMQuestionNote.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "You must add a valid note.");
+            return;
+        }
+        List<String> choices = new ArrayList<>();
+        List<String> correctAnswers = new ArrayList<>();
+
+        // Iterate through components in optionsList
+        System.out.println("Choices and Correct Answers:");
+        for (Component comp : optionsList.getComponents()) {
+            if (comp instanceof JPanel panel) { // Each answer is stored in a JPanel
+                Component[] innerComponents = panel.getComponents();
+                if (innerComponents.length == 2 && innerComponents[0] instanceof JLabel label && innerComponents[1] instanceof JCheckBox checkBox) {
+                    String answerText = label.getText().trim(); // Get text from JLabel
+                    choices.add(answerText);
+
+                    if (checkBox.isSelected()) {
+                        correctAnswers.add(answerText);
+                        System.out.println("✔ " + answerText); // Mark correct answers with ✔
+                    } else {
+                        System.out.println("✘ " + answerText); // Mark incorrect answers with ✘
+                    }
+                }
+            }
+        }
+
+        // Ensure there are choices
+        if (choices.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "You must add at least one answer.");
+            return;
+        }
+
+        // Ensure at least one correct answer is selected
+        if (correctAnswers.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "You must select at least one correct answer.");
+            return;
+        }
+
+        // Print collected data
+        System.out.println("\nFinal QCM Question Object:");
+        System.out.println("Question: " + questionText);
+        System.out.println("Choices: " + choices);
+        System.out.println("Correct Answers: " + correctAnswers);
+        System.out.println("Assigned Grade: 1.0");
+
+        // Create the QCMQuestion object
+        QCMQuestion qcmQuestion = new QCMQuestion(questionText, choices, correctAnswers, note); // Assuming grade = 1.0
+        actualTest.addQCMQuestion(qcmQuestion);
+        TestController.updateTest(actualTest);
+        QCMQuestionController.addQuestion(qcmQuestion);
+
+        // Save or process the question (store in database, list, etc.)
+        resetOptionsList();
+    }//GEN-LAST:event_addQCMQuestionActionPerformed
+
+    private void refreshQCMQuestionList() {
+        Test selectedTest = availableTestsList.getSelectedValue();
+        if (selectedTest == null) {
+            return;
+        }
+
+        Test actualTest = TestController.getTestById(selectedTest.getId());
+        DefaultListModel<QCMQuestion> qcmQuestionModel = new DefaultListModel<>();
+        List<QCMQuestion> qcmQuestions = actualTest.getQcmQuestions();
+        QCMQuestionVisitor instructorVisitor1 = new InstructorVisitor();
+        // Apply the visitor before adding to the list model
+
+        for (QCMQuestion question : qcmQuestions) {
+            question.setVisitor(instructorVisitor1);
+        }
+
+        qcmQuestionModel.addAll(qcmQuestions);
+        qcmQuestionList.setModel(qcmQuestionModel);
+    }
+
+    private void resetOptionsList() {
+        // Clear all the components (checkboxes and labels) inside optionsList panel
+        optionsList.removeAll();
+        optionsList.repaint();
+        QCMQuestionTxt.setText(null);
+        QCMQuestionNote.setText(null);
+        refreshQCMQuestionList();
+        // Reset the answer count
+        answerCount = 0;
+    }
     private int answerCount = 0; // To track answer numbers (A., B., C., etc.)
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1830,11 +2062,52 @@ public class Instructor_Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void QCMQuestionNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QCMQuestionNoteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_QCMQuestionNoteActionPerformed
+
+    private void scheduleMeeting1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scheduleMeeting1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_scheduleMeeting1ActionPerformed
+
+    private void meetingSelectedChapterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meetingSelectedChapterActionPerformed
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        Chapter selectedChapter = (Chapter) meetingSelectedChapter.getSelectedItem();
+
+        if (selectedChapter != null) {
+            Chapter actualChapter = ChapterController.getChapterById(selectedChapter.getId());
+
+            if (actualChapter != null) {
+                // Filter only meetings where ended == true for the endedMeetingTable
+                List<Meeting> endedMeetings = actualChapter.getMeetings()
+                        .stream()
+                        .filter(Meeting::isEnded) // Filters meetings that have ended
+                        .collect(Collectors.toList());
+
+                // Set the filtered list in the ended meeting table model
+                MeetingTableModel endedModel = new MeetingTableModel(endedMeetings);
+                endedMeetingTable.setModel(endedModel);
+
+                // Filter only meetings where ended == false for the recurringMeetingTable
+                List<Meeting> recurringMeetings = actualChapter.getMeetings()
+                        .stream()
+                        .filter(meeting -> !meeting.isEnded()) // Filters meetings that have not ended
+                        .collect(Collectors.toList());
+
+                // Set the filtered list in the recurring meeting table model
+                MeetingTableModel recurringModel = new MeetingTableModel(recurringMeetings);
+                recurringMeetingTable.setModel(recurringModel);
+            }
+        }
+    }//GEN-LAST:event_meetingSelectedChapterActionPerformed
+
     public void refreshTrueOrFalseList() {
         Test test = availableTestsList.getSelectedValue();
         Test currentTest = TestController.getTestById(test.getId());
         DefaultListModel<TrueOrFalseQuestion> trueOrFalseModel = new DefaultListModel<>();
         trueOrFalseModel.addAll(currentTest.getTrueOrFalseQuestions());
+        trueOrFalseQuestionList.setModel(trueOrFalseModel);
     }
 
     public void refreshTestList() {
@@ -1965,6 +2238,7 @@ public class Instructor_Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField QCMQuestionNote;
     private javax.swing.JTextField QCMQuestionTxt;
     private javax.swing.JButton addChapter;
     private javax.swing.JButton addNewSubject;
@@ -1974,6 +2248,7 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel addNewSubjectLabel3;
     private javax.swing.JLabel addNewSubjectLabel4;
     private javax.swing.JLabel addNewSubjectLabel5;
+    private javax.swing.JButton addQCMQuestion;
     private javax.swing.JButton addSyllabus;
     private javax.swing.JButton addTest;
     private javax.swing.JButton addTrueOrFalseQuestion;
@@ -1990,10 +2265,9 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel dynamicLearningMaterialName;
     private javax.swing.JPanel dynamicPanel;
     private javax.swing.JLabel dynamicUsername;
+    private javax.swing.JTable endedMeetingTable;
     private javax.swing.JTextField gradeTxt;
     private javax.swing.JComboBox<String> inputType;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2024,17 +2298,14 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JList<String> jList3;
-    private javax.swing.JList<String> jList5;
-    private javax.swing.JList<String> jList6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2044,14 +2315,12 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane14;
+    private javax.swing.JScrollPane jScrollPane15;
+    private javax.swing.JScrollPane jScrollPane16;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JLabel levelLabel;
     private javax.swing.JButton logoutButton;
@@ -2059,13 +2328,16 @@ public class Instructor_Main extends javax.swing.JFrame {
     private javax.swing.JList<Student> meetingEnrolledStudentsList;
     private javax.swing.JComboBox<Chapter> meetingSelectedChapter;
     private javax.swing.JComboBox<Subject> meetingSelectedSubject;
-    private javax.swing.JList<String> meetingsList;
     private javax.swing.JTextField newChapterNameTxt;
     private javax.swing.JList<String> objectiveList;
     private javax.swing.JTextField optionTxt;
     private javax.swing.JPanel optionsList;
     private javax.swing.JLabel prerequisitesLabel;
     private javax.swing.JList<Subject> prerequisitesList;
+    private javax.swing.JList<QCMQuestion> qcmQuestionList;
+    private javax.swing.JTable recurringMeetingTable;
+    private javax.swing.JButton scheduleMeeting;
+    private javax.swing.JButton scheduleMeeting1;
     private javax.swing.JComboBox<Subject> selectedSubjectCbx;
     private javax.swing.JLabel selectedSubjectPrice;
     private javax.swing.JButton startMeetingBtn;

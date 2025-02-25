@@ -8,7 +8,7 @@ package models;
  *
  * @author User
  */
-public class StudentVisitor implements MeetingVisitor, TrueOrFalseQuestionVisitor {
+public class StudentVisitor implements MeetingVisitor, TrueOrFalseQuestionVisitor, QCMQuestionVisitor {
 
     private Student student;
     private Chapter chapter;
@@ -33,7 +33,21 @@ public class StudentVisitor implements MeetingVisitor, TrueOrFalseQuestionVisito
 
     @Override
     public String visitTrueOrFalseQuestion(TrueOrFalseQuestion trueOrFalseQuestion) {
-        return trueOrFalseQuestion.getQuestionText() + " " + trueOrFalseQuestion.getGrade();
+        return "Grade: " + trueOrFalseQuestion.getGrade() + " " + trueOrFalseQuestion.getQuestionText();
+    }
+
+    @Override
+    public String visitQCMQuestionVisitor(QCMQuestion qcmQuestion) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n Correct Answers: ");
+        builder.append("\n Grade: ").append(qcmQuestion.getGrade() + " ");
+        builder.append(qcmQuestion.getQuestionText());
+        builder.append("\n Choices: ");
+        for (String choice : qcmQuestion.getChoices()) {
+            builder.append(choice).append(", ");
+        }
+
+        return builder.toString();
     }
 
 }

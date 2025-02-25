@@ -10,11 +10,11 @@ package models;
  */
 public interface Observer {
 
-    void update(String message);
+    void update(Student newStudentState);
 
     void meetingStarted(Meeting meeting, Instructor instructor);
 
-    void meetingEnded(Meeting meeting);
+    void meetingEnded(Meeting meeting, String instructorName);
 
     void meetingUpdated(Meeting meeting);  // For general updates, like time change
 

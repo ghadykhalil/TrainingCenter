@@ -79,9 +79,9 @@ public class ChapterController {
         for (int i = 0; i < allChapters.size(); i++) {
             Chapter chapter = allChapters.get(i);
             if (chapter.getId().equals(updatedChapter.getId())) {
-                allChapters.set(i, updatedChapter);
+                allChapters.set(i, updatedChapter);  // Update the chapter in the list
                 try {
-                    json.writeData(CHAPTER_FILE, allChapters);
+                    json.writeData(CHAPTER_FILE, allChapters);  // Write the updated list back to the file
                     JOptionPane.showMessageDialog(null,
                             "Chapter updated successfully!",
                             "Success",
